@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>四强旅行候选｜9月上海出发</title>
+  <title>旅行新候选｜9月上海出发</title>
   <style>
     :root {
       --bg: #fff7f3;
@@ -157,8 +157,10 @@
     }
 
     .tabs {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      display: flex;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
       gap: 7px;
       padding: 5px;
       border: 1px solid rgba(255,255,255,.8);
@@ -167,7 +169,11 @@
       box-shadow: 0 8px 24px rgba(83, 54, 45, 0.1);
     }
 
+    .tabs::-webkit-scrollbar { display: none; }
+
     .tab {
+      flex: 0 0 auto;
+      min-width: 72px;
       min-height: 44px;
       border: 0;
       border-radius: 14px;
@@ -466,14 +472,16 @@
       <div class="hero-content">
         <div>
           <div class="eyebrow">📍上海出发 · 2026.09.05-09.09</div>
-          <h1>四强旅行候选</h1>
-          <p class="subtitle">两个人，人均 3500-4200。低精力、不爬山、重便利和现代化，晚上要能出门吃喝，也要能舒服点外卖。</p>
+          <h1>旅行新候选</h1>
+          <p class="subtitle">两个人，人均 3500-4200。武汉先 pass：不是不好玩，是不值得请三天假。新版加入威海、柳州，继续按低精力、吃喝便利、晚上舒服来筛。</p>
         </div>
         <div class="hero-grid">
           <div class="hero-stat"><b>沈阳</b><span>西塔韩餐 + 洗浴 + NIA</span></div>
-          <div class="hero-stat"><b>武汉</b><span>过早密度最高，夜里继续吃</span></div>
+          <div class="hero-stat"><b>威海</b><span>海边散步 + 韩餐 + 海鲜</span></div>
+          <div class="hero-stat"><b>柳州</b><span>家乡加成 + 螺蛳粉夜市</span></div>
           <div class="hero-stat"><b>南昌+景德镇</b><span>陶溪川夜逛，换一次酒店</span></div>
           <div class="hero-stat"><b>深圳</b><span>椰子鸡、粤味密度、JPG</span></div>
+          <div class="hero-stat"><b>武汉</b><span>保留吃法，暂时 pass</span></div>
         </div>
       </div>
     </section>
@@ -481,6 +489,8 @@
     <nav class="tabs-wrap" aria-label="目的地切换">
       <div class="tabs">
         <button class="tab active" type="button" data-tab="shenyang">沈阳</button>
+        <button class="tab" type="button" data-tab="weihai">威海</button>
+        <button class="tab" type="button" data-tab="liuzhou">柳州</button>
         <button class="tab" type="button" data-tab="wuhan">武汉</button>
         <button class="tab" type="button" data-tab="jiangxi">南昌+景德镇</button>
         <button class="tab" type="button" data-tab="shenzhen">深圳</button>
@@ -557,10 +567,10 @@
       <div class="city-head">
         <div class="city-title">
           <div>
-            <h2>武汉｜为了吃可以专程去</h2>
-            <p class="note">武汉的核心不是一碗热干面，而是“过早生态”。山海关路可以一顿拆成五六家，两个人分食特别合适。</p>
+            <h2>武汉｜先 pass，不是否定它</h2>
+            <p class="note">武汉当然好吃好玩，但这次要请三天假、花 5 天假期，它的“专程度”不够强。保留过早和万松园吃法，当作以后周末/小长假候选。</p>
           </div>
-          <div class="score"><strong>89</strong><span>推荐</span></div>
+          <div class="score"><strong>72</strong><span>pass</span></div>
         </div>
         <div class="chips">
           <span class="chip">🍜 山海关路过早</span>
@@ -619,9 +629,141 @@
         </article>
       </div>
 
+      <div class="section-title"><h3>为什么这次 pass</h3><span>不是不好玩</span></div>
+      <article class="card" style="--accent: var(--brown)">
+        <p>上海可以吃到热干面，但很难复制“早餐街同时吃糊汤粉、豆皮、汽水包、烧麦、鸡冠饺”的城市节奏。问题是这次不是路过武汉，也不是 2-3 天小长假，而是要付出完整请假成本。所以武汉先 pass：好吃保留，但不占这次四五天假期名额。</p>
+      </article>
+    </section>
+
+    <section class="panel" id="weihai">
+      <div class="city-head">
+        <div class="city-title">
+          <div>
+            <h2>威海｜海边低精力度假组</h2>
+            <p class="note">威海适合“每天醒来慢慢吃、下午看海、晚上韩乐坊/海鲜/韩餐”的节奏。它不是夜店型城市，但很适合低精力回血。</p>
+          </div>
+          <div class="score"><strong>88</strong><span>新候选</span></div>
+        </div>
+        <div class="chips">
+          <span class="chip">🌊 不爬山看海</span>
+          <span class="chip">🥢 韩餐海鲜</span>
+          <span class="chip">🚕 城市不大</span>
+          <span class="chip">📷 火炬八街</span>
+        </div>
+      </div>
+
+      <div class="section-title"><h3>一天怎么吃</h3><span>海边慢行版</span></div>
+      <div class="cards">
+        <article class="card" style="--accent: var(--coral)">
+          <div class="card-top"><div><div class="kicker">早餐/早午餐</div><h4>鲅鱼水饺 / 海鲜粥 / 韩式简餐</h4></div><span class="tag">别赶早</span></div>
+          <p>住韩乐坊或威高广场附近，早餐不用折腾。鲅鱼水饺、海鲜粥、韩式汤饭都比上海更顺手，两个人分着点。</p>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <div class="card-top"><div><div class="kicker">午餐</div><h4>韩乐坊：韩餐 + 小吃一条线</h4></div><span class="tag">省体力</span></div>
+          <p>韩乐坊不用当“景点”，当饭点集合地就行。烤肉、拌饭、炸鸡、小吃密度高，吃完就近回酒店休息。</p>
+        </article>
+        <article class="card" style="--accent: var(--pink)">
+          <div class="card-top"><div><div class="kicker">下午茶/饮品</div><h4>火炬八街 + 海边咖啡</h4></div><span class="tag">拍照轻松</span></div>
+          <p>别把威海排成环海暴走。下午只选火炬八街、国际海水浴场、猫头山观景点中的一两个，坐咖啡比硬走更重要。</p>
+        </article>
+        <article class="card" style="--accent: var(--blue)">
+          <div class="card-top"><div><div class="kicker">晚餐</div><h4>海鲜排档 / 蒸汽海鲜 / 韩式烤肉</h4></div><span class="tag">本地感</span></div>
+          <p>想稳就商圈海鲜，想有氛围就海边排档。不要追求“最便宜海鲜”，重点是吃完方便回酒店。</p>
+        </article>
+        <article class="card" style="--accent: var(--yellow)">
+          <div class="card-top"><div><div class="kicker">夜宵</div><h4>韩乐坊小吃 or 外卖炸鸡</h4></div><span class="tag">不硬嗨</span></div>
+          <p>威海夜生活不是深圳那种，但韩乐坊、威高广场一带晚上还算方便。更适合散步、吹风、外卖。</p>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>住哪里</h3><span>二选一</span></div>
+      <div class="cards two">
+        <article class="card" style="--accent: var(--red)">
+          <h4>韩乐坊 / 威高广场</h4>
+          <ul class="list">
+            <li><b>韩乐坊周边中端酒店</b>：吃韩餐、夜宵、外卖最方便。</li>
+            <li><b>威高广场/市中心酒店</b>：商场、咖啡、打车都稳，天气不好也不狼狈。</li>
+            <li><b>预算够看海景酒店</b>：但不要为了海景住太偏，低精力会被反噬。</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <h4>低精力安排</h4>
+          <div class="day"><div class="time">11:00</div><div><strong>醒来吃韩餐/水饺</strong><p>不用赶日出，旅行感留给海边。</p></div></div>
+          <div class="day"><div class="time">15:00</div><div><strong>火炬八街 + 海边咖啡</strong><p>拍完就坐下，不安排长线徒步。</p></div></div>
+          <div class="day"><div class="time">18:30</div><div><strong>海鲜或韩式烤肉</strong><p>吃舒服，别追低价排档。</p></div></div>
+          <div class="day"><div class="time">21:00</div><div><strong>韩乐坊/海边散步</strong><p>轻夜生活，适合聊天投票。</p></div></div>
+        </article>
+      </div>
+
       <div class="section-title"><h3>为什么值得专程去</h3><span>对上海的差异</span></div>
       <article class="card" style="--accent: var(--brown)">
-        <p>上海可以吃到热干面，但很难复制“早餐街同时吃糊汤粉、豆皮、汽水包、烧麦、鸡冠饺”的城市节奏。武汉赢在早上和夜里，白天反而要克制。</p>
+        <p>威海的价值不是景点数量，而是“看海成本低 + 城市干净 + 韩餐海鲜密度 + 节奏松”。如果你们这次想休息大于打卡，它比武汉更符合请三天假的情绪价值。</p>
+      </article>
+    </section>
+
+    <section class="panel" id="liuzhou">
+      <div class="city-head">
+        <div class="city-title">
+          <div>
+            <h2>柳州｜家乡加成，吃得最有理由</h2>
+            <p class="note">柳州不是“陌生城市攻略”，它有你的家乡滤镜。旅行价值不只是螺蛳粉，而是把对方带进你的生活味道里。</p>
+          </div>
+          <div class="score"><strong>90</strong><span>情感牌</span></div>
+        </div>
+        <div class="chips">
+          <span class="chip">🍜 螺蛳粉原产地</span>
+          <span class="chip">🌙 青云市场</span>
+          <span class="chip">🥢 鸭脚煲烧烤</span>
+          <span class="chip">🏠 家乡加成</span>
+        </div>
+      </div>
+
+      <div class="section-title"><h3>一天怎么吃</h3><span>别只吃粉</span></div>
+      <div class="cards">
+        <article class="card" style="--accent: var(--coral)">
+          <div class="card-top"><div><div class="kicker">早餐/早午餐</div><h4>螺蛳粉：找你小时候那口</h4></div><span class="tag">家乡优势</span></div>
+          <p>不用被游客榜绑架。你来定“最像家乡”的粉：干捞/汤粉、加鸭脚、加腐竹、加油果，两个人分开点更有意思。</p>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <div class="card-top"><div><div class="kicker">午餐</div><h4>牛杂 / 螺蛳鸭脚煲 / 酸笋炒菜</h4></div><span class="tag">本地日常</span></div>
+          <p>午餐别继续硬吃粉，可以换牛杂、炒螺、鸭脚煲、本地小炒。柳州赢在重口日常，不是单一爆款。</p>
+        </article>
+        <article class="card" style="--accent: var(--pink)">
+          <div class="card-top"><div><div class="kicker">下午茶/饮品</div><h4>五星街/窑埠古镇：甜品饮品慢逛</h4></div><span class="tag">低强度</span></div>
+          <p>下午避开热的时候，找糖水、凉茶、咖啡坐一下。9 月柳州可能热，酒店午休很重要。</p>
+        </article>
+        <article class="card" style="--accent: var(--blue)">
+          <div class="card-top"><div><div class="kicker">晚餐</div><h4>青云市场 + 风情港/五星街</h4></div><span class="tag">夜市</span></div>
+          <p>青云市场适合小吃扫街：糯米饭、豆花、酸嘢、烧烤、鸭脚。你负责点，对方负责被柳州震住。</p>
+        </article>
+        <article class="card" style="--accent: var(--yellow)">
+          <div class="card-top"><div><div class="kicker">夜宵</div><h4>烧烤 + 螺蛳粉外卖第二轮</h4></div><span class="tag">快乐</span></div>
+          <p>如果住五星街/城中万达附近，夜里外卖选择会很好。柳州的夜宵是这次候选里最有私人理由的。</p>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>住哪里</h3><span>方便带路</span></div>
+      <div class="cards two">
+        <article class="card" style="--accent: var(--red)">
+          <h4>城中万达 / 五星街 / 风情港</h4>
+          <ul class="list">
+            <li><b>城中万达周边中高端酒店</b>：商场、外卖、打车都稳，低精力友好。</li>
+            <li><b>五星街/人民广场周边</b>：吃喝密度最高，晚上下楼方便。</li>
+            <li><b>窑埠古镇附近</b>：夜景好，但吃的选择不如市中心密。</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <h4>低精力安排</h4>
+          <div class="day"><div class="time">11:00</div><div><strong>你选一家螺蛳粉</strong><p>用“家乡口味”压过游客榜。</p></div></div>
+          <div class="day"><div class="time">14:00</div><div><strong>酒店午休</strong><p>柳州 9 月热，别硬扛。</p></div></div>
+          <div class="day"><div class="time">17:30</div><div><strong>青云市场/五星街</strong><p>小吃扫街，少量多家。</p></div></div>
+          <div class="day"><div class="time">21:00</div><div><strong>江边散步或外卖</strong><p>夜里再补烧烤/鸭脚煲。</p></div></div>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>为什么值得专程去</h3><span>对上海的差异</span></div>
+      <article class="card" style="--accent: var(--brown)">
+        <p>上海有螺蛳粉，但没有“由柳州人带路”的柳州。它的专程价值来自食物密度、夜市和私人叙事：这不是去打卡，是把一个人的家乡变成两个人的旅行。</p>
       </article>
     </section>
 
@@ -792,14 +934,19 @@
     </section>
 
     <section class="compare">
-      <h3>四城对比 & 投票提示</h3>
+      <h3>新候选对比 & 投票提示</h3>
+      <div class="rank-row"><strong>柳州</strong><div class="bar"><i style="width: 90%"></i></div><span>家乡</span></div>
       <div class="rank-row"><strong>沈阳</strong><div class="bar"><i style="width: 92%"></i></div><span>稳赢</span></div>
-      <div class="rank-row"><strong>武汉</strong><div class="bar"><i style="width: 89%"></i></div><span>吃赢</span></div>
+      <div class="rank-row"><strong>威海</strong><div class="bar"><i style="width: 88%"></i></div><span>回血</span></div>
       <div class="rank-row"><strong>深圳</strong><div class="bar"><i style="width: 84%"></i></div><span>看天气</span></div>
       <div class="rank-row"><strong>江西线</strong><div class="bar"><i style="width: 82%"></i></div><span>文艺</span></div>
+      <div class="rank-row"><strong>武汉</strong><div class="bar"><i style="width: 72%"></i></div><span>pass</span></div>
       <div class="vote">
         <b>两人投票法：</b>每人选 2 个标签：①最想专程吃 ②最想晚上出门 ③最不怕累 ④酒店最想住舒服 ⑤预算最安心。标签最多的城市胜出。<br />
-        <b>当前建议：</b>默认沈阳；如果“吃”权重最大选武汉；如果深圳 9 月初天气好且想要现代城市感，深圳可以翻盘；想逛市集买杯子再选南昌+景德镇。
+        <b>当前建议：</b>想稳选沈阳；想带朋友进入你的家乡选柳州；想休息看海选威海；想现代城市感选深圳；想买杯子逛市集选南昌+景德镇。武汉不是不好玩，只是这次请假成本不划算。
+      </div>
+      <div class="vote">
+        <b>还可以备选：</b>青岛适合“海边+啤酒+德式老城”，但游客密度可能高；长沙适合夜宵和情绪价值，但 9 月可能热且人多；泉州适合老城小吃和闽南氛围，但夜生活不如深圳沈阳。按你们偏好，我会优先把威海、柳州放进主池。
       </div>
     </section>
 
