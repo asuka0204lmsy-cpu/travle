@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>四强旅行候选｜9月上海出发</title>
+  <style>
+    :root {
+      --bg: #fff7f3;
+      --ink: #2a2527;
+      --muted: #74696b;
+      --line: rgba(42, 37, 39, 0.1);
+      --card: rgba(255, 255, 255, 0.86);
+      --shadow: 0 14px 36px rgba(83, 54, 45, 0.12);
+      --red: #ff5b6e;
+      --pink: #ff8ca3;
+      --coral: #ff7b54;
+      --mint: #62c6a6;
+      --blue: #5f8df7;
+      --yellow: #ffd166;
+      --brown: #8e5b3f;
+      --radius: 22px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+      letter-spacing: 0;
+      background:
+        radial-gradient(circle at 16% 4%, rgba(255, 209, 102, 0.28), transparent 28%),
+        radial-gradient(circle at 88% 10%, rgba(98, 198, 166, 0.24), transparent 26%),
+        linear-gradient(180deg, #fff9f5 0%, #fff1f3 46%, #f7fbff 100%);
+      min-height: 100vh;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+    }
+
+    .app {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 14px 14px calc(36px + var(--safe-bottom));
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 78vh;
+      padding: 28px 20px 20px;
+      border-radius: 28px;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(38, 30, 30, 0.58), rgba(38, 30, 30, 0.12)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='1200' viewBox='0 0 900 1200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23ff687c'/%3E%3Cstop offset='.46' stop-color='%23ffb86b'/%3E%3Cstop offset='1' stop-color='%2362c6a6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='900' height='1200' fill='url(%23g)'/%3E%3Cg opacity='.34'%3E%3Ccircle cx='130' cy='150' r='110' fill='%23fff'/%3E%3Ccircle cx='760' cy='220' r='145' fill='%23fff'/%3E%3Ccircle cx='180' cy='980' r='170' fill='%23fff'/%3E%3Ccircle cx='790' cy='880' r='110' fill='%23fff'/%3E%3C/g%3E%3Cg fill='none' stroke='%23fff' stroke-width='7' opacity='.33'%3E%3Cpath d='M98 438 C212 330 348 542 478 430 S735 364 802 504'/%3E%3Cpath d='M84 708 C244 620 324 824 492 702 S698 626 834 738'/%3E%3C/g%3E%3Cg font-family='Arial' font-size='78' opacity='.88'%3E%3Ctext x='80' y='270'%3E🍜%3C/text%3E%3Ctext x='690' y='395'%3E🍗%3C/text%3E%3Ctext x='130' y='620'%3E🥥%3C/text%3E%3Ctext x='620' y='730'%3E🏨%3C/text%3E%3Ctext x='305' y='960'%3E🌙%3C/text%3E%3C/g%3E%3C/svg%3E") center/cover;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 36%;
+      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: calc(78vh - 48px);
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 11px;
+      border: 1px solid rgba(255,255,255,.36);
+      border-radius: 999px;
+      background: rgba(255,255,255,.17);
+      backdrop-filter: blur(12px);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    h1 {
+      max-width: 12ch;
+      margin: 14px 0 12px;
+      font-size: clamp(40px, 12vw, 78px);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 31em;
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      text-shadow: 0 1px 14px rgba(0,0,0,.22);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .hero-stat {
+      min-height: 84px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 18px;
+      background: rgba(255,255,255,.18);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-stat b {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .hero-stat span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255,255,255,.86);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .tabs-wrap {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      margin: 12px -14px 0;
+      padding: 10px 14px;
+      background: rgba(255, 247, 243, 0.78);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,.55);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 7px;
+      padding: 5px;
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 8px 24px rgba(83, 54, 45, 0.1);
+    }
+
+    .tab {
+      min-height: 44px;
+      border: 0;
+      border-radius: 14px;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--red), var(--coral));
+      box-shadow: 0 8px 18px rgba(255, 91, 110, .28);
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .city-head {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.75);
+    }
+
+    .city-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .score {
+      min-width: 68px;
+      text-align: center;
+      padding: 8px 9px;
+      border-radius: 18px;
+      color: #fff;
+      background: #2a2527;
+      box-shadow: 0 10px 20px rgba(42,37,39,.18);
+    }
+
+    .score strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .score span {
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 13px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #5d5355;
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    .note {
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 22px 2px 10px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .section-title span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .cards {
+      display: grid;
+      gap: 11px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 15px;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.78);
+      box-shadow: var(--shadow);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: var(--accent, var(--red));
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .kicker {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .card h4 {
+      margin: 2px 0 6px;
+      font-size: 17px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .tag {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent, var(--red)) 16%, #fff);
+      color: color-mix(in srgb, var(--accent, var(--red)) 82%, #1b1b1b);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .list {
+      display: grid;
+      gap: 8px;
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .list li {
+      padding: 10px 11px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--line);
+      color: #453d40;
+      font-size: 14px;
+    }
+
+    .list b { color: var(--ink); }
+
+    .day {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .day:last-child { border-bottom: 0; }
+
+    .time {
+      position: sticky;
+      top: 76px;
+      width: 72px;
+      padding: 7px 8px;
+      border-radius: 13px;
+      background: #fff;
+      color: var(--accent, var(--red));
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+      border: 1px solid var(--line);
+    }
+
+    .day strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 15px;
+    }
+
+    .day p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .compare {
+      margin-top: 26px;
+      padding: 18px;
+      border-radius: 26px;
+      background: #2a2527;
+      color: #fff;
+      box-shadow: 0 18px 42px rgba(42,37,39,.22);
+    }
+
+    .compare h3 {
+      margin: 0 0 12px;
+      font-size: 21px;
+    }
+
+    .rank-row {
+      display: grid;
+      grid-template-columns: 74px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+
+    .rank-row:last-child { border-bottom: 0; }
+
+    .bar {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,.15);
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--yellow), var(--pink));
+    }
+
+    .vote {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.9);
+      font-size: 14px;
+    }
+
+    .sources {
+      margin: 18px 2px 0;
+      color: #70666a;
+      font-size: 11px;
+    }
+
+    .sources a {
+      color: #5f6cf7;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    @media (min-width: 680px) {
+      .app { padding-top: 22px; }
+      .hero { min-height: 620px; }
+      .hero-content { min-height: 572px; }
+      .hero-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .cards.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tab { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="hero-content">
+        <div>
+          <div class="eyebrow">📍上海出发 · 2026.09.05-09.09</div>
+          <h1>四强旅行候选</h1>
+          <p class="subtitle">两个人，人均 3500-4200。低精力、不爬山、重便利和现代化，晚上要能出门吃喝，也要能舒服点外卖。</p>
+        </div>
+        <div class="hero-grid">
+          <div class="hero-stat"><b>沈阳</b><span>西塔韩餐 + 洗浴 + NIA</span></div>
+          <div class="hero-stat"><b>武汉</b><span>过早密度最高，夜里继续吃</span></div>
+          <div class="hero-stat"><b>南昌+景德镇</b><span>陶溪川夜逛，换一次酒店</span></div>
+          <div class="hero-stat"><b>深圳</b><span>椰子鸡、粤味密度、JPG</span></div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="tabs-wrap" aria-label="目的地切换">
+      <div class="tabs">
+        <button class="tab active" type="button" data-tab="shenyang">沈阳</button>
+        <button class="tab" type="button" data-tab="wuhan">武汉</button>
+        <button class="tab" type="button" data-tab="jiangxi">南昌+景德镇</button>
+        <button class="tab" type="button" data-tab="shenzhen">深圳</button>
+      </div>
+    </nav>
+
+    <section class="panel active" id="shenyang">
+      <div class="city-head">
+        <div class="city-title">
+          <div>
+            <h2>沈阳｜现在最像“稳赢局”</h2>
+            <p class="note">不用把自己塞进景点清单。住中街/青年大街，白天慢慢吃，晚上西塔、老北市、洗浴，体力消耗低但旅行感很强。</p>
+          </div>
+          <div class="score"><strong>92</strong><span>推荐</span></div>
+        </div>
+        <div class="chips">
+          <span class="chip">🥢 西塔韩餐浓度高</span>
+          <span class="chip">🛁 洗浴友好</span>
+          <span class="chip">🥤 NIA 茶纳</span>
+          <span class="chip">🚕 打车成本低</span>
+        </div>
+      </div>
+
+      <div class="section-title"><h3>一天怎么吃</h3><span>两人分食版</span></div>
+      <div class="cards">
+        <article class="card" style="--accent: var(--coral)">
+          <div class="card-top"><div><div class="kicker">早餐/早午餐</div><h4>马三烧卖回头馆 or 老四季</h4></div><span class="tag">沈阳日常</span></div>
+          <p>起晚就吃烧卖、回头、羊汤；想轻一点就老四季鸡架抻面。重点不是猎奇，是上海少见的东北日常密度。</p>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <div class="card-top"><div><div class="kicker">午餐</div><h4>西塔：参鸡汤 / 冷面 / 烤肉</h4></div><span class="tag">像小首尔</span></div>
+          <p>优先长寿参鸡汤、冷面大王、西塔老太太泥炉烤肉。两人别点满桌，冷面+烤肉+小菜已经很够。</p>
+        </article>
+        <article class="card" style="--accent: var(--pink)">
+          <div class="card-top"><div><div class="kicker">下午茶/饮品</div><h4>NIA 茶纳，中街吾悦店优先</h4></div><span class="tag">已修正</span></div>
+          <p>沈阳本土新锐茶饮，写 NIA 茶纳，不写成别的。可以点泰式奶茶/奶茶线，顺手在中街或吾悦逛一圈。</p>
+        </article>
+        <article class="card" style="--accent: var(--blue)">
+          <div class="card-top"><div><div class="kicker">晚餐</div><h4>西塔酱蟹、烤鳗鱼、韩式炸鸡</h4></div><span class="tag">专程价值</span></div>
+          <p>高社长酱蟹、金家烤鳗鱼、泡菜街小吃都适合。草家酱蟹、师任堂打糕、传闻来紫菜包饭适合顺手补。</p>
+        </article>
+        <article class="card" style="--accent: var(--yellow)">
+          <div class="card-top"><div><div class="kicker">夜宵</div><h4>鸡架 + 麻辣拌 + 洗浴外卖</h4></div><span class="tag">低精力快乐</span></div>
+          <p>中街、太原街、西塔都有鸡架和烧烤。晚上不想动，回酒店点鸡架、卷饭、麻辣拌，比硬逛景点幸福。</p>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>住哪里</h3><span>便利优先</span></div>
+      <div class="cards two">
+        <article class="card" style="--accent: var(--red)">
+          <h4>首选：青年大街/市府广场/中街边缘</h4>
+          <ul class="list">
+            <li><b>沈阳青年大街市府广场亚朵S酒店</b>：地铁、商场、外卖都稳，去中街/西塔都不折腾。</li>
+            <li><b>沈阳中街故宫亚朵S酒店</b>：更靠逛街和游客区，适合第一次去。</li>
+            <li><b>沈阳青年公园希尔顿欢朋酒店</b>：免费早餐、品牌稳定，离故宫/博物馆约 2 公里级别。</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <h4>低精力安排</h4>
+          <div class="day"><div class="time">10:30</div><div><strong>睡醒吃烧卖/回头</strong><p>不要早起赶景点，第一餐吃舒服。</p></div></div>
+          <div class="day"><div class="time">13:30</div><div><strong>中街 + NIA</strong><p>商场空调、买饮品、少走路。</p></div></div>
+          <div class="day"><div class="time">17:30</div><div><strong>西塔正餐</strong><p>烤肉/酱蟹/参鸡汤三选一。</p></div></div>
+          <div class="day"><div class="time">21:00</div><div><strong>洗浴或老北市</strong><p>累了就洗浴，精神好再去夜市。</p></div></div>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>为什么值得专程去</h3><span>对上海的差异</span></div>
+      <article class="card" style="--accent: var(--brown)">
+        <p>沈阳的优势是“花不太多钱，得到很完整的吃喝住玩闭环”：西塔韩餐不是单店打卡，而是一整个街区；鸡架、洗浴、东北烧烤和外卖夜生活也更自然。对你们这种低精力旅行，沈阳最容易玩得像度假。</p>
+      </article>
+    </section>
+
+    <section class="panel" id="wuhan">
+      <div class="city-head">
+        <div class="city-title">
+          <div>
+            <h2>武汉｜为了吃可以专程去</h2>
+            <p class="note">武汉的核心不是一碗热干面，而是“过早生态”。山海关路可以一顿拆成五六家，两个人分食特别合适。</p>
+          </div>
+          <div class="score"><strong>89</strong><span>推荐</span></div>
+        </div>
+        <div class="chips">
+          <span class="chip">🍜 山海关路过早</span>
+          <span class="chip">🦞 早粉晚虾</span>
+          <span class="chip">🌃 万松园夜宵</span>
+          <span class="chip">🏨 汉口住宿</span>
+        </div>
+      </div>
+
+      <div class="section-title"><h3>一天怎么吃</h3><span>高可信过早</span></div>
+      <div class="cards">
+        <article class="card" style="--accent: var(--coral)">
+          <div class="card-top"><div><div class="kicker">早餐/早午餐</div><h4>山海关路：每家买一份，两人分</h4></div><span class="tag">重点</span></div>
+          <ul class="list">
+            <li><b>汪记鲜鱼糊汤粉</b>：糊汤粉+油条，11 点左右相对更友好。</li>
+            <li><b>孙氏豆皮</b>：三鲜豆皮一份就够，11:30 左右通常比早高峰轻松。</li>
+            <li><b>毛氏汽水包</b>：莲藕、香菇糯米、粉丝馅任选，尽量现买热吃。</li>
+            <li><b>严老幺/严式烧麦</b>：重油、黑胡椒、糯米，和上海烧卖完全不是一类。</li>
+            <li><b>李记鸡冠饺</b>：想补一个炸物再买，不要贪多。</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <div class="card-top"><div><div class="kicker">午餐</div><h4>午餐主动减负</h4></div><span class="tag">别硬吃</span></div>
+          <p>过早吃完已经很饱。午餐安排咖啡、商场、酒店休息，不要再塞湖北菜名店。真正的下一顿留给晚上。</p>
+        </article>
+        <article class="card" style="--accent: var(--pink)">
+          <div class="card-top"><div><div class="kicker">下午茶/饮品</div><h4>黎黄陂路 / 武汉天地</h4></div><span class="tag">散步量低</span></div>
+          <p>选汉口一带咖啡或茶饮，逛一点老建筑就回酒店。9 月可能还热，下午别把体力用光。</p>
+        </article>
+        <article class="card" style="--accent: var(--blue)">
+          <div class="card-top"><div><div class="kicker">晚餐</div><h4>万松园：虾、烧烤、砂锅、湖北菜</h4></div><span class="tag">住近点</span></div>
+          <p>不要执着全网第一。到万松园后看当天等位，选评分稳、不排长队、步行近的虾店/烧烤/砂锅，体验不会差。</p>
+        </article>
+        <article class="card" style="--accent: var(--yellow)">
+          <div class="card-top"><div><div class="kicker">夜宵</div><h4>江汉路 or 万松园外卖</h4></div><span class="tag">夜生活</span></div>
+          <p>精神好去江汉路，累了就万松园周边外卖。武汉的夜宵优势是选择密、送得快、口味重。</p>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>住哪里</h3><span>汉口优先</span></div>
+      <div class="cards two">
+        <article class="card" style="--accent: var(--red)">
+          <h4>首选：万松园 / 新华路 / 取水楼</h4>
+          <ul class="list">
+            <li><b>汉庭武汉新华路万松园酒店</b>：2026 年开业，携程显示洗衣房、智能马桶，离万松园近。</li>
+            <li><b>宜尚酒店（武汉广场万松园店）</b>：位置思路正确，晚上吃完好回。</li>
+            <li><b>武汉广场/武商商圈周边中端酒店</b>：外卖、地铁、商场都方便。</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <h4>低精力安排</h4>
+          <div class="day"><div class="time">10:30</div><div><strong>山海关路过早</strong><p>每家一份，两人分，别被碳水击穿。</p></div></div>
+          <div class="day"><div class="time">13:00</div><div><strong>回酒店休息</strong><p>这是武汉行程成败点。</p></div></div>
+          <div class="day"><div class="time">16:30</div><div><strong>黎黄陂路轻逛</strong><p>拍照喝东西，不暴走。</p></div></div>
+          <div class="day"><div class="time">19:00</div><div><strong>万松园晚饭</strong><p>虾/烧烤/砂锅，现场按等位决定。</p></div></div>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>为什么值得专程去</h3><span>对上海的差异</span></div>
+      <article class="card" style="--accent: var(--brown)">
+        <p>上海可以吃到热干面，但很难复制“早餐街同时吃糊汤粉、豆皮、汽水包、烧麦、鸡冠饺”的城市节奏。武汉赢在早上和夜里，白天反而要克制。</p>
+      </article>
+    </section>
+
+    <section class="panel" id="jiangxi">
+      <div class="city-head">
+        <div class="city-title">
+          <div>
+            <h2>南昌+景德镇｜文艺夜逛组</h2>
+            <p class="note">这组不是纯吃赢，而是“南昌重口早餐夜市 + 景德镇陶溪川夜生活”。适合想买小东西、看市集、拍照的人。</p>
+          </div>
+          <div class="score"><strong>82</strong><span>备选</span></div>
+        </div>
+        <div class="chips">
+          <span class="chip">🍲 拌粉瓦罐汤</span>
+          <span class="chip">🏺 陶溪川</span>
+          <span class="chip">🌙 万寿宫夜逛</span>
+          <span class="chip">🚄 换一次城市</span>
+        </div>
+      </div>
+
+      <div class="section-title"><h3>一天怎么吃</h3><span>南昌 2 晚 + 景德镇 2 晚</span></div>
+      <div class="cards">
+        <article class="card" style="--accent: var(--coral)">
+          <div class="card-top"><div><div class="kicker">早餐/早午餐</div><h4>南昌：拌粉 + 瓦罐汤</h4></div><span class="tag">刚需</span></div>
+          <ul class="list">
+            <li><b>秦胖子肉坨良心店（石头街）</b>：素拌粉+肉坨汤。</li>
+            <li><b>小罗子汤店（大士院）</b>：万寿宫附近，适合住老城时顺路。</li>
+            <li><b>黄记瓦罐汤（象山南路/系马桩）</b>：莲藕排骨汤、拌粉。</li>
+            <li><b>周真真南昌粉面</b>：连锁稳定，夜里想吃粉也能兜底。</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <div class="card-top"><div><div class="kicker">午餐</div><h4>南昌赣菜别挑战满辣</h4></div><span class="tag">说微辣</span></div>
+          <p>堂瓦里/老三样/本地小炒都可以，但要明确说微辣。你们不是来参加辣椒耐力赛的。</p>
+        </article>
+        <article class="card" style="--accent: var(--pink)">
+          <div class="card-top"><div><div class="kicker">下午茶/饮品</div><h4>景德镇：陶溪川咖啡 + 买杯子</h4></div><span class="tag">好逛</span></div>
+          <p>陶溪川、雕塑瓷厂一带更适合下午到晚上。买杯子、逛小店、坐咖啡，比传统景点更对你们胃口。</p>
+        </article>
+        <article class="card" style="--accent: var(--blue)">
+          <div class="card-top"><div><div class="kicker">晚餐</div><h4>南昌万寿宫 / 珠宝街；景德镇陶溪川</h4></div><span class="tag">夜逛型</span></div>
+          <p>南昌晚饭吃小炒、油浸鱼、藜蒿炒腊肉；景德镇晚上吃江西菜或轻食，重点留给夜市和市集。</p>
+        </article>
+        <article class="card" style="--accent: var(--yellow)">
+          <div class="card-top"><div><div class="kicker">夜宵</div><h4>万寿宫夜市 / 陶溪川夜逛</h4></div><span class="tag">氛围</span></div>
+          <p>这组的夜生活更偏“逛、买、拍、喝”，不是沈阳武汉那种纯吃到撑。</p>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>住哪里</h3><span>只换一次酒店</span></div>
+      <div class="cards two">
+        <article class="card" style="--accent: var(--red)">
+          <h4>南昌：万寿宫 / 滕王阁周边</h4>
+          <ul class="list">
+            <li><b>美豪丽致酒店（万寿宫滕王阁店）</b>：位置贴近老城夜逛。</li>
+            <li><b>南昌滕王阁美居江景酒店</b>：想要江景和更舒服一点可以看。</li>
+            <li><b>格林豪泰酒店（南昌万寿宫店）</b>：预算友好，胜在下楼方便。</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <h4>景德镇：陶溪川周边</h4>
+          <ul class="list">
+            <li><b>景德镇陶溪川凯悦嘉轩酒店</b>：最省心，直接住进核心区。</li>
+            <li><b>陶溪川国贸饭店</b>：厂房改造氛围强，适合拍照。</li>
+            <li><b>朵兰达V酒店（景德镇陶溪川文创街区店）</b>：预算和位置折中。</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>低精力安排</h3><span>4 晚拆法</span></div>
+      <article class="card" style="--accent: var(--blue)">
+        <div class="day"><div class="time">D1-D2</div><div><strong>南昌住万寿宫</strong><p>白天拌粉瓦罐汤，下午酒店休息，晚上万寿宫/珠宝街。</p></div></div>
+        <div class="day"><div class="time">D3-D4</div><div><strong>高铁到景德镇</strong><p>住陶溪川，下午到晚上逛市集和陶瓷小店。</p></div></div>
+        <div class="day"><div class="time">D5</div><div><strong>睡醒返程</strong><p>别安排远郊景点，买完杯子就走。</p></div></div>
+      </article>
+
+      <div class="section-title"><h3>为什么值得专程去</h3><span>对上海的差异</span></div>
+      <article class="card" style="--accent: var(--brown)">
+        <p>南昌的拌粉瓦罐汤和重口小炒有本地日常感；景德镇的差异在陶瓷生活方式，上海也有市集，但很难有陶溪川这种“整片围绕陶瓷生长”的晚上。</p>
+      </article>
+    </section>
+
+    <section class="panel" id="shenzhen">
+      <div class="city-head">
+        <div class="city-title">
+          <div>
+            <h2>深圳｜不要八合里，改吃深圳稀缺感</h2>
+            <p class="note">深圳不能再用“八合里”当理由，上海也有且不稀缺。新版重点：椰子鸡、顺德菜、潮汕/客家/广府、社区型店、JPG 和上海排队体验差异。</p>
+          </div>
+          <div class="score"><strong>84</strong><span>可翻盘</span></div>
+        </div>
+        <div class="chips">
+          <span class="chip">🥥 椰子鸡</span>
+          <span class="chip">🐟 顺德菜</span>
+          <span class="chip">🍵 JPG</span>
+          <span class="chip">🌆 现代便利</span>
+        </div>
+      </div>
+
+      <div class="section-title"><h3>一天怎么吃</h3><span>深圳修正版</span></div>
+      <div class="cards">
+        <article class="card" style="--accent: var(--coral)">
+          <div class="card-top"><div><div class="kicker">早餐/早午餐</div><h4>广式早茶 / 肠粉 / 社区茶餐厅</h4></div><span class="tag">别赶早</span></div>
+          <p>可以选蘩楼、蔡澜港式点心、匠传点心这类稳定店；想更社区，就找福田/南山居民区肠粉、烧腊饭、茶餐厅。</p>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <div class="card-top"><div><div class="kicker">午餐</div><h4>顺德菜：鱼生、啫啫、桑拿鸡、煲仔饭</h4></div><span class="tag">更值得</span></div>
+          <p>深圳吃顺德/广府比上海更有密度。选商场里的顺德菜更低精力，想认真吃再去社区店。</p>
+        </article>
+        <article class="card" style="--accent: var(--pink)">
+          <div class="card-top"><div><div class="kicker">下午茶/饮品</div><h4>JPG Coffee + 华侨城/南山逛法</h4></div><span class="tag">上海缺失</span></div>
+          <p>把 JPG 当深圳本地生活方式打卡，不要只当咖啡。搭配万象天地、华侨城、后海，动线轻松又现代。</p>
+        </article>
+        <article class="card" style="--accent: var(--blue)">
+          <div class="card-top"><div><div class="kicker">晚餐</div><h4>椰子鸡：润园四季 / 同仁四季</h4></div><span class="tag">重点修正</span></div>
+          <p>优先润园四季，点竹笙椰子鸡、珍珠小马蹄、腊味煲仔饭；同仁四季适合想要 live 氛围。别排八合里。</p>
+        </article>
+        <article class="card" style="--accent: var(--yellow)">
+          <div class="card-top"><div><div class="kicker">夜宵</div><h4>潮汕砂锅粥 / 烧鹅 / 客家菜外卖</h4></div><span class="tag">密度差</span></div>
+          <p>深圳夜里可以吃得很“两广”：潮汕砂锅粥、烧腊、牛肉丸、客家咸菜焖猪肉、广式糖水。住福田/南山外卖很强。</p>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>顺手吃的小店/片区</h3><span>替代“网红排队”</span></div>
+      <div class="cards">
+        <article class="card" style="--accent: var(--red)">
+          <ul class="list">
+            <li><b>福田车公庙/香蜜湖</b>：润园四季安徽大厦店，椰子鸡后回酒店很方便。</li>
+            <li><b>南山后海/万象天地</b>：JPG、咖啡、商场粤菜、夜里去人才公园看海边城市感。</li>
+            <li><b>蛇口海上世界</b>：晚酒、海边散步、外籍餐厅多，氛围和上海不同。</li>
+            <li><b>南头古城</b>：本地菜、小南记、咖啡、小店聚集，适合下午+晚饭。</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>住哪里</h3><span>现代便利优先</span></div>
+      <div class="cards two">
+        <article class="card" style="--accent: var(--red)">
+          <h4>首选：福田 CBD / 车公庙</h4>
+          <ul class="list">
+            <li><b>深圳福田香格里拉/大中华希尔顿一带</b>：预算够时最省心，夜生活和交通稳。</li>
+            <li><b>深圳车公庙亚朵/全季/欢朋类中端</b>：适合控制人均预算，外卖强。</li>
+            <li><b>会展中心/岗厦北周边</b>：地铁方便，去椰子鸡、商场、酒吧都短打车。</li>
+          </ul>
+        </article>
+        <article class="card" style="--accent: var(--mint)">
+          <h4>备选：南山后海 / 万象天地</h4>
+          <ul class="list">
+            <li><b>后海商圈酒店</b>：更靠海边夜散步、人才公园、深圳湾万象城。</li>
+            <li><b>万象天地周边</b>：更适合 JPG、咖啡、买东西和年轻城市感。</li>
+            <li><b>蛇口</b>：夜晚舒服，但去机场/高铁和市区吃饭会更分散。</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="section-title"><h3>低精力安排</h3><span>现代城市度假</span></div>
+      <article class="card" style="--accent: var(--blue)">
+        <div class="day"><div class="time">11:00</div><div><strong>广式早午茶</strong><p>不用早起，点虾饺、烧卖、肠粉、艇仔粥。</p></div></div>
+        <div class="day"><div class="time">14:30</div><div><strong>JPG + 万象天地/后海</strong><p>空调商场和咖啡，保持体力。</p></div></div>
+        <div class="day"><div class="time">18:30</div><div><strong>润园四季椰子鸡</strong><p>汤、鸡、煲仔饭，清爽但有深圳感。</p></div></div>
+        <div class="day"><div class="time">21:30</div><div><strong>海上世界/COCO Park</strong><p>想喝就喝，不想喝就外卖糖水。</p></div></div>
+      </article>
+
+      <div class="section-title"><h3>为什么值得专程去</h3><span>对上海的差异</span></div>
+      <article class="card" style="--accent: var(--brown)">
+        <p>深圳赢在“现代便利 + 两广风味密度”。上海有潮汕牛肉火锅，所以八合里不成立；但深圳的椰子鸡、顺德/广府/客家和深夜糖水外卖更顺手，很多店不用经历上海同款排队压力。天气好时，深圳排名可以上升。</p>
+      </article>
+    </section>
+
+    <section class="compare">
+      <h3>四城对比 & 投票提示</h3>
+      <div class="rank-row"><strong>沈阳</strong><div class="bar"><i style="width: 92%"></i></div><span>稳赢</span></div>
+      <div class="rank-row"><strong>武汉</strong><div class="bar"><i style="width: 89%"></i></div><span>吃赢</span></div>
+      <div class="rank-row"><strong>深圳</strong><div class="bar"><i style="width: 84%"></i></div><span>看天气</span></div>
+      <div class="rank-row"><strong>江西线</strong><div class="bar"><i style="width: 82%"></i></div><span>文艺</span></div>
+      <div class="vote">
+        <b>两人投票法：</b>每人选 2 个标签：①最想专程吃 ②最想晚上出门 ③最不怕累 ④酒店最想住舒服 ⑤预算最安心。标签最多的城市胜出。<br />
+        <b>当前建议：</b>默认沈阳；如果“吃”权重最大选武汉；如果深圳 9 月初天气好且想要现代城市感，深圳可以翻盘；想逛市集买杯子再选南昌+景德镇。
+      </div>
+    </section>
+
+    <p class="sources">
+      信息校对参考：
+      <a href="https://sw.wuhan.gov.cn/xwdt/gzdt/202605/t20260514_2764299.shtml">武汉商务“早粉晚虾”</a>、
+      <a href="https://wh.bendibao.com/tour/2024424/179019.shtm">武汉本地宝山海关路</a>、
+      <a href="https://www.seazen.com.cn/news/del-299.html">新城控股 NIA 茶纳</a>、
+      <a href="https://www.sz.gov.cn/cn/xxgk/zfxxgj/bmdt/content/post_10448533.html">深圳粤菜路线</a>、
+      <a href="https://www.tongren4.com/">同仁四季官网</a>、
+      <a href="https://gs.ctrip.com/html5/you/foods/fooddetail/26/5175218.html">润园四季携程</a>、
+      <a href="https://m.ctrip.com/html5/hotel/hoteldetail/134907389.html">汉庭武汉新华路万松园</a>、
+      <a href="https://www.hilton.com/zh-hans/hotels/shetahx-hampton-shenyang-youth-park/">沈阳青年公园希尔顿欢朋</a>。
+    </p>
+  </main>
+
+  <script>
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const panels = Array.from(document.querySelectorAll(".panel"));
+
+    function activate(tabName, shouldScroll) {
+      tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === tabName));
+      panels.forEach((panel) => panel.classList.toggle("active", panel.id === tabName));
+      history.replaceState(null, "", "#" + tabName);
+      if (shouldScroll) {
+        document.querySelector(".tabs-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => activate(tab.dataset.tab, true));
+    });
+
+    const initial = location.hash.replace("#", "");
+    if (initial && document.getElementById(initial)) {
+      activate(initial, false);
+    }
+  </script>
+</body>
+</html>
