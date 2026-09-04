@@ -46,6 +46,7 @@
       position: relative;
       min-height: 100vh;
       overflow: hidden;
+      isolation: isolate;
       background:
         linear-gradient(26deg, transparent 0 17%, rgba(255,255,255,.7) 17.2% 18.1%, transparent 18.3%),
         linear-gradient(96deg, transparent 0 38%, rgba(255,255,255,.74) 38.2% 39.4%, transparent 39.6%),
@@ -64,6 +65,14 @@
         radial-gradient(ellipse at 70% 80%, rgba(215,234,215,.78) 0 15%, transparent 15.4%),
         linear-gradient(115deg, transparent 0 39%, rgba(185,218,245,.92) 39.2% 45%, transparent 45.2%);
       filter: saturate(1.02);
+    }
+    .map-world {
+      position: absolute;
+      inset: 0;
+      transform: translate(var(--map-x, 0), var(--map-y, 0)) scale(var(--map-scale, 1));
+      transform-origin: 50% 50%;
+      transition: transform .34s cubic-bezier(.2,.8,.2,1);
+      will-change: transform;
     }
 
     .road {
@@ -117,6 +126,7 @@
       background: rgba(52, 120, 246, .5);
       box-shadow: 0 0 0 4px rgba(52, 120, 246, .09);
       pointer-events: none;
+      transition: opacity .2s ease;
     }
     .route::after {
       content: attr(data-label);
@@ -217,7 +227,7 @@
       z-index: 8;
       left: var(--x);
       top: var(--y);
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(var(--pin-scale, 1));
       display: inline-grid;
       grid-template-columns: 30px minmax(0, 1fr);
       align-items: center;
@@ -233,9 +243,10 @@
       cursor: pointer;
       transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
     }
+    .pin .txt { display: block; }
     .pin.active {
       z-index: 12;
-      transform: translate(-50%, -56%) scale(1.08);
+      transform: translate(-50%, -56%) scale(calc(var(--pin-scale, 1) * 1.08));
       box-shadow: 0 18px 38px rgba(31,41,51,.25);
     }
     .pin.dim { opacity: .22; }
@@ -250,16 +261,16 @@
       background: var(--c);
       font-size: 16px;
     }
-    .pin b, .pin span {
+    .pin b, .pin .txt span {
       display: block;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
     .pin b { font-size: 12px; line-height: 1.15; }
-    .pin span { margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 760; }
-    .pin.hotel { background: #25313e; color: #fff; }
-    .pin.hotel span { color: rgba(255,255,255,.74); }
+    .pin .txt span { margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 760; }
+    .pin.hotel, .pin.focus { background: #25313e; color: #fff; }
+    .pin.hotel .txt span, .pin.focus .txt span { color: rgba(255,255,255,.74); }
     .pin.anchor {
       z-index: 18;
       width: var(--w, 132px);
@@ -280,12 +291,12 @@
     }
     .pin.dot {
       grid-template-columns: 30px;
-      width: 44px;
-      min-height: 44px;
-      padding: 7px;
+      width: 38px;
+      min-height: 38px;
+      padding: 4px;
       border-radius: 999px;
     }
-    .pin.dot > span:last-child { display: none; }
+    .pin.dot .txt { display: none; }
     .pin.dot.active,
     .pin.dot.anchor {
       grid-template-columns: 30px minmax(0, 1fr);
@@ -293,7 +304,7 @@
       border-radius: 18px;
     }
     .pin.dot.active > span:last-child,
-    .pin.dot.anchor > span:last-child {
+    .pin.dot.anchor .txt {
       display: block;
     }
 
@@ -497,6 +508,8 @@
       letter-spacing: 0;
     }
     .pin.zoom-hidden { display: none; }
+    .map[data-zoom="1"] .label { opacity: .72; }
+    .map[data-zoom="3"] .label { opacity: .34; }
 
     @media (min-width: 760px) {
       .hero-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
@@ -507,6 +520,9 @@
     @media (max-width: 420px) {
       .phone { min-height: 100svh; }
       .map { min-height: 100svh; }
+      .map::before { opacity: .86; }
+      .map[data-zoom="1"] .route:not(:first-of-type) { opacity: .52; }
+      .map[data-zoom="3"] .route::after { opacity: 0; }
       .trip-head {
         display: grid;
         align-items: flex-start;
@@ -537,9 +553,9 @@
         font-size: 12px;
         border-radius: 13px;
       }
-      .timeline { top: 166px; padding-right: 54px; }
+      .timeline { display: none !important; }
       .zoomctl {
-        top: 166px;
+        top: 174px;
         right: 8px;
       }
       .zoomctl button,
@@ -550,28 +566,28 @@
       }
       .day { flex-basis: 148px; min-height: 72px; padding: 9px; }
       .pin {
-        width: min(var(--w, 138px), 34vw);
-        min-height: 40px;
-        grid-template-columns: 25px minmax(0,1fr);
+        width: min(var(--w, 138px), 38vw);
+        min-height: 38px;
+        grid-template-columns: 24px minmax(0,1fr);
         gap: 5px;
-        padding: 6px;
-        border-radius: 15px;
+        padding: 5px 7px;
+        border-radius: 14px;
       }
       .pin .icon {
-        width: 25px;
-        height: 25px;
+        width: 24px;
+        height: 24px;
         border-radius: 10px;
         font-size: 14px;
       }
       .pin b { font-size: 11px; }
-      .pin span { font-size: 9px; }
+      .pin .txt span { font-size: 9px; }
       .pin.anchor {
         width: min(var(--w, 128px), 38vw);
         min-height: 42px;
       }
       .pin.dot {
-        width: 38px;
-        min-height: 38px;
+        width: 34px;
+        min-height: 34px;
         padding: 6px;
       }
       .pin.dot.active,
@@ -615,36 +631,38 @@
 <body>
   <main class="phone">
     <section class="map">
-      <div class="road major" style="--x:4%;--y:33%;--w:86%;--r:-7deg"></div>
-      <div class="road major" style="--x:16%;--y:58%;--w:62%;--r:15deg"></div>
-      <div class="road" style="--x:2%;--y:72%;--w:92%;--r:24deg"></div>
-      <div class="road" style="--x:12%;--y:20%;--w:72%;--r:27deg"></div>
-      <div class="road" style="--x:68%;--y:18%;--w:8px;--h:74%;--r:5deg"></div>
-      <div class="metro" data-name="5号线" style="--x:12%;--y:38%;--w:76%;--r:-6deg;--c:#d9373c"></div>
-      <div class="metro" data-name="1号线" style="--x:18%;--y:55%;--w:58%;--r:13deg;--c:#f2c230"></div>
-      <div class="metro" data-name="广佛/顺德方向" style="--x:27%;--y:78%;--w:65%;--r:19deg;--c:#179b72"></div>
-      <div class="route" data-label="9.5 11:15落地 → 酒店约45-60min" style="--x:55%;--y:17%;--w:27%;--r:129deg"></div>
-      <div class="route" data-label="酒店 → 广州南 约45-60min" style="--x:48%;--y:42%;--w:42%;--r:132deg"></div>
-      <div class="route" data-label="酒店 → 北京路 约15-25min" style="--x:43%;--y:43%;--w:26%;--r:126deg"></div>
-      <div class="route" data-label="酒店 → 体育西/天河 约20-30min" style="--x:54%;--y:41%;--w:29%;--r:40deg"></div>
-      <div class="route" data-label="广州南 → 大良 约35-50min" style="--x:24%;--y:77%;--w:50%;--r:-38deg"></div>
+      <div class="map-world" id="map-world">
+        <div class="road major" style="--x:4%;--y:33%;--w:86%;--r:-7deg"></div>
+        <div class="road major" style="--x:16%;--y:58%;--w:62%;--r:15deg"></div>
+        <div class="road" style="--x:2%;--y:72%;--w:92%;--r:24deg"></div>
+        <div class="road" style="--x:12%;--y:20%;--w:72%;--r:27deg"></div>
+        <div class="road" style="--x:68%;--y:18%;--w:8px;--h:74%;--r:5deg"></div>
+        <div class="metro" data-name="5号线" style="--x:12%;--y:38%;--w:76%;--r:-6deg;--c:#d9373c"></div>
+        <div class="metro" data-name="1号线" style="--x:18%;--y:55%;--w:58%;--r:13deg;--c:#f2c230"></div>
+        <div class="metro" data-name="广佛/顺德方向" style="--x:27%;--y:78%;--w:65%;--r:19deg;--c:#179b72"></div>
+        <div class="route" data-label="9.5 11:15落地 → 酒店约45-60min" style="--x:55%;--y:17%;--w:27%;--r:129deg"></div>
+        <div class="route" data-label="酒店 → 广州南 约45-60min" style="--x:48%;--y:42%;--w:42%;--r:132deg"></div>
+        <div class="route" data-label="酒店 → 北京路 约15-25min" style="--x:43%;--y:43%;--w:26%;--r:126deg"></div>
+        <div class="route" data-label="酒店 → 体育西/天河 约20-30min" style="--x:54%;--y:41%;--w:29%;--r:40deg"></div>
+        <div class="route" data-label="广州南 → 大良 约35-50min" style="--x:24%;--y:77%;--w:50%;--r:-38deg"></div>
 
-      <div class="layer" id="layer-hotel">
-        <div class="label" style="--x:30%;--y:24%;--r:-8deg">越秀</div>
-        <div class="label" style="--x:78%;--y:69%;--r:-7deg">珠江新城</div>
-      </div>
-      <div class="layer active" id="layer-guangzhou">
-        <div class="label" style="--x:32%;--y:24%;--r:-8deg">越秀</div>
-        <div class="label" style="--x:26%;--y:67%;--r:10deg">北京路</div>
-        <div class="label" style="--x:31%;--y:88%;--r:11deg">上下九</div>
-        <div class="label" style="--x:15%;--y:78%;--r:-10deg">圣心</div>
-        <div class="label" style="--x:78%;--y:73%;--r:-7deg">天河</div>
-        <div class="label" style="--x:77%;--y:58%;--r:7deg">体育西</div>
-      </div>
-      <div class="layer" id="layer-shunde">
-        <div class="label" style="--x:34%;--y:74%;--r:18deg">广州南</div>
-        <div class="label" style="--x:72%;--y:37%;--r:-5deg">大良</div>
-        <div class="label" style="--x:38%;--y:50%;--r:8deg">金榜街</div>
+        <div class="layer" id="layer-hotel">
+          <div class="label" style="--x:30%;--y:24%;--r:-8deg">越秀</div>
+          <div class="label" style="--x:78%;--y:69%;--r:-7deg">珠江新城</div>
+        </div>
+        <div class="layer active" id="layer-guangzhou">
+          <div class="label" style="--x:32%;--y:24%;--r:-8deg">越秀</div>
+          <div class="label" style="--x:26%;--y:67%;--r:10deg">北京路</div>
+          <div class="label" style="--x:31%;--y:88%;--r:11deg">上下九</div>
+          <div class="label" style="--x:15%;--y:78%;--r:-10deg">圣心</div>
+          <div class="label" style="--x:78%;--y:73%;--r:-7deg">天河</div>
+          <div class="label" style="--x:77%;--y:58%;--r:7deg">体育西</div>
+        </div>
+        <div class="layer" id="layer-shunde">
+          <div class="label" style="--x:34%;--y:74%;--r:18deg">广州南</div>
+          <div class="label" style="--x:72%;--y:37%;--r:-5deg">大良</div>
+          <div class="label" style="--x:38%;--y:50%;--r:8deg">金榜街</div>
+        </div>
       </div>
     </section>
 
@@ -662,9 +680,9 @@
     <div class="filters" id="filters"></div>
     <div class="zoomctl" id="zoomctl" aria-label="地图缩放">
       <button type="button" data-zoom-step="1" aria-label="显示更多地点">+</button>
-      <div class="zoom-badge" id="zoom-badge">街区</div>
+      <div class="zoom-badge" id="zoom-badge">大地图</div>
       <button type="button" data-zoom-step="-1" aria-label="显示更少地点">−</button>
-      <button type="button" data-zoom-reset aria-label="回到街区视图">↺</button>
+      <button type="button" data-zoom-reset aria-label="回到大地图">↺</button>
     </div>
 
     <div class="timeline" id="timeline">
@@ -753,6 +771,7 @@
     };
 
     const map = document.querySelector(".map");
+    const mapWorld = document.getElementById("map-world");
     const rail = document.getElementById("rail");
     const card = document.getElementById("place-card");
     const filterBox = document.getElementById("filters");
@@ -762,9 +781,21 @@
     const zoomBadge = document.getElementById("zoom-badge");
     let mode = "guangzhou";
     let activeFilter = "all";
-    let zoomLevel = 2;
+    let zoomLevel = 1;
     let currentPlaces = [];
-    const zoomLabels = { 1: "城市", 2: "街区", 3: "小店" };
+    const zoomLabels = { 1: "大地图", 2: "片区", 3: "小地图" };
+    const mapViews = {
+      guangzhou: {
+        1: { scale: .86, x: "0%", y: "3%" },
+        2: { scale: 1.18, x: "-7%", y: "-10%" },
+        3: { scale: 1.78, x: "-26%", y: "-46%" }
+      },
+      shunde: {
+        1: { scale: .88, x: "0%", y: "2%" },
+        2: { scale: 1.28, x: "-10%", y: "-18%" },
+        3: { scale: 1.92, x: "-39%", y: "-42%" }
+      }
+    };
 
     function categoryName(type) {
       return {hotel:"酒店", transport:"交通", mall:"天河/商场", tea:"早茶粤菜", snack:"小吃甜品", delivery:"外卖夜宵", dessert:"甜品冰室", meal:"顺德正餐", sight:"老城地标"}[type] || type;
@@ -797,9 +828,9 @@
         pin.dataset.zoom = zoomFor(place);
         pin.dataset.anchor = isAnchor ? "true" : "false";
         pin.style.cssText = `--x:${x}%;--y:${y}%;--w:${w}px;--c:${colors[type]}`;
-        pin.innerHTML = `<span class="icon">${icon}</span><span><b>${name}</b><span>${area} · ${dish}</span></span>`;
+        pin.innerHTML = `<span class="icon">${icon}</span><span class="txt"><b>${name}</b><span>${area} · ${dish}</span></span>`;
         pin.addEventListener("click", () => selectPlace(index));
-        map.appendChild(pin);
+        mapWorld.appendChild(pin);
       });
       applyFilter();
       selectFirstVisible();
@@ -840,8 +871,13 @@
     function applyFilter() {
       zoomBadge.textContent = zoomLabels[zoomLevel];
       map.dataset.zoom = zoomLevel;
+      const view = mapViews[mode][zoomLevel];
+      mapWorld.style.setProperty("--map-scale", view.scale);
+      mapWorld.style.setProperty("--map-x", view.x);
+      mapWorld.style.setProperty("--map-y", view.y);
       document.querySelectorAll(".pin").forEach((pin) => {
         const isAnchor = pin.dataset.anchor === "true";
+        pin.style.setProperty("--pin-scale", (1 / view.scale).toFixed(2));
         pin.classList.toggle("zoom-hidden", !isAnchor && Number(pin.dataset.zoom) > zoomLevel);
         pin.classList.toggle("filter-hidden", !isAnchor && activeFilter !== "all" && pin.dataset.type !== activeFilter);
         pin.classList.toggle("dot", !isAnchor && zoomLevel === 3 && activeFilter === "all");
@@ -851,7 +887,7 @@
     zoomBox.addEventListener("click", (event) => {
       const btn = event.target.closest("button");
       if (!btn) return;
-      if (btn.dataset.zoomReset !== undefined) zoomLevel = 2;
+      if (btn.dataset.zoomReset !== undefined) zoomLevel = 1;
       else zoomLevel = Math.min(3, Math.max(1, zoomLevel + Number(btn.dataset.zoomStep || 0)));
       applyFilter();
       selectFirstVisible();
