@@ -20,6 +20,7 @@
       --water: #b9daf5;
       --park: #d7ead7;
       --road: #fff8e7;
+      --topbar-bottom: 132px;
     }
 
     * { box-sizing: border-box; }
@@ -47,6 +48,8 @@
       min-height: 100vh;
       overflow: hidden;
       isolation: isolate;
+      cursor: grab;
+      touch-action: none;
       background:
         linear-gradient(26deg, transparent 0 17%, rgba(255,255,255,.7) 17.2% 18.1%, transparent 18.3%),
         linear-gradient(96deg, transparent 0 38%, rgba(255,255,255,.74) 38.2% 39.4%, transparent 39.6%),
@@ -69,10 +72,19 @@
     .map-world {
       position: absolute;
       inset: 0;
-      transform: translate(var(--map-x, 0), var(--map-y, 0)) scale(var(--map-scale, 1));
+      transform: translate(
+        calc(var(--map-x, 0px) + var(--map-pan-x, 0px)),
+        calc(var(--map-y, 0px) + var(--map-pan-y, 0px))
+      ) scale(var(--map-scale, 1));
       transform-origin: 50% 50%;
       transition: transform .34s cubic-bezier(.2,.8,.2,1);
       will-change: transform;
+    }
+    .map.dragging {
+      cursor: grabbing;
+    }
+    .map.dragging .map-world {
+      transition: none;
     }
 
     .road {
@@ -312,7 +324,7 @@
       position: fixed;
       z-index: 45;
       left: 50%;
-      top: 132px;
+      top: calc(var(--topbar-bottom) + 10px);
       transform: translateX(-50%);
       width: min(100%, 900px);
       display: flex;
@@ -449,7 +461,7 @@
       position: fixed;
       z-index: 44;
       left: 50%;
-      top: 178px;
+      top: calc(var(--topbar-bottom) + 58px);
       transform: translateX(-50%);
       width: min(100%, 900px);
       display: none;
@@ -478,7 +490,7 @@
       position: fixed;
       z-index: 46;
       right: max(12px, calc((100vw - 900px) / 2 + 12px));
-      top: 178px;
+      top: calc(var(--topbar-bottom) + 58px);
       display: grid;
       gap: 6px;
       pointer-events: auto;
@@ -514,10 +526,9 @@
     @media (min-width: 760px) {
       .hero-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
       .map { min-height: 900px; }
-      .filters { top: 134px; }
       .pin { --w: 164px; }
     }
-    @media (max-width: 420px) {
+    @media (max-width: 520px) {
       .phone { min-height: 100svh; }
       .map { min-height: 100svh; }
       .map::before { opacity: .86; }
@@ -543,7 +554,6 @@
       .tabs { gap: 4px; padding: 4px; border-radius: 16px; }
       .tab { height: 36px; font-size: 12px; border-radius: 12px; }
       .filters {
-        top: 124px;
         padding: 0 64px 10px 10px;
         gap: 8px;
       }
@@ -555,7 +565,6 @@
       }
       .timeline { display: none !important; }
       .zoomctl {
-        top: 174px;
         right: 8px;
       }
       .zoomctl button,
@@ -772,6 +781,7 @@
 
     const map = document.querySelector(".map");
     const mapWorld = document.getElementById("map-world");
+    const topbar = document.querySelector(".topbar");
     const rail = document.getElementById("rail");
     const card = document.getElementById("place-card");
     const filterBox = document.getElementById("filters");
@@ -783,6 +793,8 @@
     let activeFilter = "all";
     let zoomLevel = 1;
     let currentPlaces = [];
+    let pan = { x: 0, y: 0 };
+    let drag = null;
     const zoomLabels = { 1: "大地图", 2: "片区", 3: "小地图" };
     const mapViews = {
       guangzhou: {
@@ -801,6 +813,30 @@
       return {hotel:"酒店", transport:"交通", mall:"天河/商场", tea:"早茶粤菜", snack:"小吃甜品", delivery:"外卖夜宵", dessert:"甜品冰室", meal:"顺德正餐", sight:"老城地标"}[type] || type;
     }
 
+    function clampPan(x, y) {
+      const limitX = Math.max(34, window.innerWidth * (zoomLevel === 1 ? .16 : zoomLevel === 2 ? .34 : .62));
+      const limitY = Math.max(60, window.innerHeight * (zoomLevel === 1 ? .14 : zoomLevel === 2 ? .32 : .7));
+      return {
+        x: Math.min(limitX, Math.max(-limitX, x)),
+        y: Math.min(limitY, Math.max(-limitY, y))
+      };
+    }
+
+    function applyPan() {
+      mapWorld.style.setProperty("--map-pan-x", `${pan.x}px`);
+      mapWorld.style.setProperty("--map-pan-y", `${pan.y}px`);
+    }
+
+    function syncChromeLayout() {
+      const bottom = Math.ceil(topbar.getBoundingClientRect().bottom);
+      document.documentElement.style.setProperty("--topbar-bottom", `${bottom}px`);
+    }
+
+    new ResizeObserver(syncChromeLayout).observe(topbar);
+    window.addEventListener("resize", syncChromeLayout);
+    window.addEventListener("orientationchange", () => setTimeout(syncChromeLayout, 250));
+    document.fonts?.ready?.then(syncChromeLayout);
+
     function zoomFor(place) {
       const [type, , name] = place;
       if (place[14]) return 1;
@@ -813,6 +849,7 @@
 
     function renderFilters() {
       filterBox.innerHTML = filters[mode].map(([type, text]) => `<button class="filter ${type === activeFilter ? "active" : ""}" data-type="${type}" style="--active-color:${type === "all" ? "#25313e" : colors[type]}">${text}</button>`).join("");
+      syncChromeLayout();
     }
 
     function renderPins() {
@@ -875,6 +912,8 @@
       mapWorld.style.setProperty("--map-scale", view.scale);
       mapWorld.style.setProperty("--map-x", view.x);
       mapWorld.style.setProperty("--map-y", view.y);
+      pan = clampPan(pan.x, pan.y);
+      applyPan();
       document.querySelectorAll(".pin").forEach((pin) => {
         const isAnchor = pin.dataset.anchor === "true";
         pin.style.setProperty("--pin-scale", (1 / view.scale).toFixed(2));
@@ -893,6 +932,29 @@
       selectFirstVisible();
     });
 
+    map.addEventListener("pointerdown", (event) => {
+      if (event.target.closest(".pin, a, button")) return;
+      drag = { id: event.pointerId, x: event.clientX, y: event.clientY, startX: pan.x, startY: pan.y };
+      map.classList.add("dragging");
+      map.setPointerCapture(event.pointerId);
+    });
+
+    map.addEventListener("pointermove", (event) => {
+      if (!drag || drag.id !== event.pointerId) return;
+      const next = clampPan(drag.startX + event.clientX - drag.x, drag.startY + event.clientY - drag.y);
+      pan = next;
+      applyPan();
+    });
+
+    function endDrag(event) {
+      if (!drag || drag.id !== event.pointerId) return;
+      drag = null;
+      map.classList.remove("dragging");
+    }
+
+    map.addEventListener("pointerup", endDrag);
+    map.addEventListener("pointercancel", endDrag);
+
     filterBox.addEventListener("click", (event) => {
       const btn = event.target.closest(".filter");
       if (!btn) return;
@@ -906,6 +968,7 @@
       tab.addEventListener("click", () => {
         mode = tab.dataset.mode;
         activeFilter = "all";
+        pan = { x: 0, y: 0 };
         document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("active", item === tab));
         document.querySelectorAll(".layer").forEach((layer) => layer.classList.toggle("active", layer.id === `layer-${mode}`));
         timeline.classList.toggle("active", mode === "guangzhou");
@@ -919,6 +982,7 @@
     const target = [...document.querySelectorAll(".tab")].find((tab) => tab.dataset.mode === initial);
     if (target) target.click();
     else { renderFilters(); renderPins(); }
+    syncChromeLayout();
   </script>
 </body>
 </html>
