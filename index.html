@@ -279,6 +279,27 @@
       padding: 14px;
       border-radius: 24px;
     }
+    .drawer.compact .place-card {
+      align-self: end;
+      max-width: 430px;
+      margin-left: auto;
+      padding: 10px 12px;
+      border-radius: 19px;
+    }
+    .drawer.compact .quick,
+    .drawer.compact .dish {
+      display: none;
+    }
+    .drawer.compact .rail {
+      display: none;
+    }
+    .drawer.compact .place-head h2 {
+      font-size: 16px;
+      max-width: 14em;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
     .place-head {
       display: flex;
       align-items: flex-start;
@@ -292,6 +313,16 @@
       border-radius: 999px;
       color: #fff;
       background: var(--red);
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .toggle {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border: 0;
+      border-radius: 999px;
+      color: #25313e;
+      background: #edf2f7;
       font-size: 12px;
       font-weight: 950;
     }
@@ -411,12 +442,16 @@
       .label { font-size: clamp(22px, 12vw, 44px); opacity: .82; }
       .drawer { width: calc(100% - 16px); bottom: max(8px, env(safe-area-inset-bottom)); }
       .place-card {
-        max-height: 37svh;
+        max-height: 34svh;
         overflow: auto;
         padding: 12px;
         border-radius: 22px;
       }
       .place-head h2 { font-size: 18px; }
+      .drawer.compact .place-card {
+        max-height: none;
+        padding: 9px 10px;
+      }
       .nav { padding: 6px 9px; font-size: 11px; }
       .quick {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -488,7 +523,7 @@
       <div class="day"><time>9.9</time><b>返程</b><span>太平沙财记/酒店早餐 → 白云T3</span></div>
     </div>
 
-    <div class="drawer">
+    <div class="drawer compact" id="drawer">
       <article class="place-card glass" id="place-card"></article>
       <div class="rail" id="rail"></div>
     </div>
@@ -498,7 +533,7 @@
     const colors = { hotel:"#25313e", transport:"#3478f6", mall:"#7957d5", tea:"#179b72", snack:"#ef4e5d", delivery:"#f28a36", dessert:"#ef4e5d", meal:"#179b72", sight:"#8b5e3c" };
     const filters = {
       hotel: [["all","全部"],["transport","交通"],["mall","商场"],["tea","早茶粤菜"],["snack","小吃甜品"],["delivery","外卖友好"]],
-      guangzhou: [["all","全部"],["tea","正餐早茶"],["snack","老城小吃"],["delivery","外卖夜宵"],["mall","商场夜景"],["sight","老城地标"]],
+      guangzhou: [["all","全部"],["tea","早茶粤菜"],["dessert","甜品冰室"],["snack","老城小吃"],["delivery","外卖夜宵"],["mall","商场夜景"],["sight","老城地标"]],
       shunde: [["all","全部"],["transport","交通"],["dessert","双皮奶"],["snack","小吃"],["meal","正餐"]]
     };
     const layers = {
@@ -521,8 +556,8 @@
         ["tea","🍵","利苑酒家","宜安广场4楼","近酒店","早茶/粤菜","第一顿稳，建议订位","https://www.amap.com/search?query=利苑酒家 宜安广场",42,34,146],
         ["tea","🍵","点都德","邮电新村西六街店","近酒店","虾饺/凤爪/肠粉","早午餐，排队就换利苑","https://www.amap.com/search?query=点都德 邮电新村西六街店",28,41,154],
         ["delivery","🍜","太平沙财记","淘金附近","近酒店","粥粉面饭","落地/夜宵兜底，外卖友好","https://www.amap.com/search?query=太平沙财记 淘金",53,43,146],
-        ["snack","🍧","百花传统甜品","文明路","老城","芝麻糊/双皮奶/糖水","夜里专程甜品，和玫瑰二选一","https://www.amap.com/search?query=百花传统甜品 文明路",25,64,150],
-        ["snack","🍮","玫瑰甜品","文明路","老城","凤凰奶糊/杏仁豆腐","糖水第二选择，可外带","https://www.amap.com/search?query=玫瑰甜品 文明路",37,68,134],
+        ["dessert","🍧","百花传统甜品","文明路","老城","芝麻糊/双皮奶/糖水","夜里专程甜品，和玫瑰二选一","https://www.amap.com/search?query=百花传统甜品 文明路",25,64,150],
+        ["dessert","🍮","玫瑰甜品","文明路","老城","凤凰奶糊/杏仁豆腐","糖水第二选择，可外带","https://www.amap.com/search?query=玫瑰甜品 文明路",37,68,134],
         ["snack","🥘","阿婆牛杂","北京路片区","老城","牛杂萝卜","扫街少量尝，不当正餐","https://www.amap.com/search?query=阿婆牛杂 北京路 广州",20,56,138],
         ["snack","🥣","银记肠粉","惠福东/老城","老城","鲜虾肠/牛肉肠","早餐或下午补，连锁稳","https://www.amap.com/search?query=银记肠粉 惠福东路",48,61,142],
         ["delivery","🍚","民记煲仔饭","惠福东路片区","老城","煲仔饭","晚市早到，想吃锅气选它","https://www.amap.com/search?query=民记煲仔饭 惠福东路",58,68,144],
@@ -536,8 +571,13 @@
         ["sight","🛍","上下九步行街","荔湾西关","老城街区","陶陶居/莲香楼/南信/顺记","这才是广州小吃密度","https://www.amap.com/search?query=上下九步行街 广州",31,82,148],
         ["tea","🍵","陶陶居","第十甫路总店","上下九","早茶/烧味/点心","老字号氛围强，排队就换莲香楼","https://www.amap.com/search?query=陶陶居 第十甫路总店",37,80,144,"常见早茶至晚市，约08:00-22:00","连锁/老字号周一通常低风险；仍以导航为准","高，饭点和周末明显"],
         ["tea","🥮","莲香楼","第十甫路","上下九","早茶/月饼老字号","适合和陶陶居二选一","https://www.amap.com/search?query=莲香楼 第十甫路",43,84,128,"常见约07:00-22:00","老字号周一通常低风险；出发前确认","中高，早茶饭点排"],
-        ["snack","🍧","南信牛奶甜品专家","第十甫路","上下九","双皮奶/姜撞奶/牛三星","甜品强点位，适合下午或夜里","https://www.amap.com/search?query=南信牛奶甜品专家 第十甫路",49,80,160,"常见约09:00-22:30","周一通常低风险；节假日可能延长/调整","高，下午到夜里排"],
-        ["snack","🍨","顺记冰室","宝华路","上下九","椰子雪糕/冰室甜品","冰品线，和宝华面店连吃","https://www.amap.com/search?query=顺记冰室 宝华路",55,86,136,"常见约09:00-22:00","周一通常低风险；老店以现场为准","中高，热天更忙"],
+        ["tea","🍵","广州酒家","文昌南路总店","西关","早茶/文昌鸡/点心","更经典的老广早茶牌，可接上下九","https://www.amap.com/search?query=广州酒家 文昌南路总店",33,88,148,"常见早茶至晚市，约07:00-22:00","老字号周一通常低风险；以导航为准","高，早茶饭点明显"],
+        ["tea","🌿","泮溪酒家","荔湾湖畔","西关","园林早茶/点心","想要环境和老广仪式感选它","https://www.amap.com/search?query=泮溪酒家",18,87,132,"常见约08:00-21:30","老字号周一通常低风险；以导航为准","中高，周末早茶高"],
+        ["tea","🏮","北园酒家","小北路","越秀","传统粤菜/早茶","离酒店方向更近的老字号备选","https://www.amap.com/search?query=北园酒家 广州",42,53,132,"常见午晚市+早茶，具体看门店","老字号低风险；以导航为准","中，饭点可订位"],
+        ["dessert","🍧","南信牛奶甜品专家","第十甫路","上下九","双皮奶/姜撞奶/牛三星","甜品强点位，适合下午或夜里","https://www.amap.com/search?query=南信牛奶甜品专家 第十甫路",49,80,160,"常见约09:00-22:30","周一通常低风险；节假日可能延长/调整","高，下午到夜里排"],
+        ["dessert","🍨","顺记冰室","宝华路","上下九","椰子雪糕/冰室甜品","冰品线，和宝华面店连吃","https://www.amap.com/search?query=顺记冰室 宝华路",55,86,136,"常见约09:00-22:00","周一通常低风险；老店以现场为准","中高，热天更忙"],
+        ["dessert","🍮","仁信老铺","北京路/广州多店","老城甜品","双皮奶/姜撞奶/糖水","不想跑上下九时用附近门店兜底","https://www.amap.com/search?query=仁信老铺 北京路 广州",32,58,132,"多店常见约10:00-22:00","连锁多店周一低风险","中，饭点后甜品高"],
+        ["dessert","🍧","芬芳甜品","同福路/海珠老店","老城甜品","糖不甩/芒果甜品/传统糖水","可和圣心/海珠广场线组合","https://www.amap.com/search?query=芬芳甜品 广州",16,64,128,"常见约11:00-23:00","老店周一风险低至中，出发前确认","中高，夜里更忙"],
         ["snack","🐟","陈添记鱼皮","宝华路十五甫三巷","上下九","凉拌鱼皮/艇仔粥","小吃代表，少量多家","https://www.amap.com/search?query=陈添记鱼皮 宝华路",45,90,142,"常见约09:00-21:30","周一通常低风险；卖完/临休看现场","高，翻台快"],
         ["snack","🍜","宝华面店","宝华路","上下九","云吞面/牛腩面","顺记冰室旁边，咸甜连吃","https://www.amap.com/search?query=宝华面店 宝华路",60,91,136,"常见约07:00-22:00","周一通常低风险；以导航为准","中高，饭点排"],
         ["snack","🥣","吴财记面家","大同路","西关","云吞面/炸云吞","沙面/上下九附近可接","https://www.amap.com/search?query=吴财记面家 大同路",19,91,138,"常见约07:00-21:30","小店周一/临休风险中等，出发前看导航","中，饭点排"],
@@ -567,6 +607,7 @@
     const card = document.getElementById("place-card");
     const filterBox = document.getElementById("filters");
     const timeline = document.getElementById("timeline");
+    const drawer = document.getElementById("drawer");
     let mode = "hotel";
     let activeFilter = "all";
 
@@ -602,7 +643,7 @@
       const restRisk = rest || "连锁/商场店低风险；小店周一和临休需确认";
       const queue = crowd || "饭点中等，热门店周末偏高";
       document.querySelectorAll(".pin").forEach((pin) => pin.classList.toggle("active", Number(pin.dataset.index) === index));
-      card.innerHTML = `<div class="place-head"><h2>${icon} ${name}</h2><a class="nav" href="${url}" target="_blank" rel="noreferrer">导航</a></div>
+      card.innerHTML = `<div class="place-head"><h2>${icon} ${name}</h2><div><button class="toggle" type="button">${drawer.classList.contains("compact") ? "展开" : "收起"}</button> <a class="nav" href="${url}" target="_blank" rel="noreferrer">导航</a></div></div>
         <div class="quick">
           <div><b>片区</b><span>${area}</span></div>
           <div><b>场景</b><span>${distance}</span></div>
@@ -612,6 +653,10 @@
           <div><b>排队</b><span>${queue}</span></div>
         </div>
         <p class="dish"><b>${dish}</b>｜${note}</p>`;
+      card.querySelector(".toggle").addEventListener("click", () => {
+        drawer.classList.toggle("compact");
+        card.querySelector(".toggle").textContent = drawer.classList.contains("compact") ? "展开" : "收起";
+      });
       rail.innerHTML = layers[mode].map((item, i) => `<button class="mini" data-index="${i}"><b>${item[1]} ${item[2]}</b><span>${item[5]}</span></button>`).join("");
       rail.querySelectorAll(".mini").forEach((btn) => btn.addEventListener("click", () => selectPlace(Number(btn.dataset.index))));
     }
