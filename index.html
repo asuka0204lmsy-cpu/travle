@@ -104,6 +104,35 @@
       font-size: 10px;
       font-weight: 800;
     }
+    .route {
+      position: absolute;
+      z-index: 3;
+      left: var(--x);
+      top: var(--y);
+      width: var(--w);
+      height: 3px;
+      transform: rotate(var(--r));
+      transform-origin: left center;
+      border-radius: 999px;
+      background: rgba(52, 120, 246, .5);
+      box-shadow: 0 0 0 4px rgba(52, 120, 246, .09);
+      pointer-events: none;
+    }
+    .route::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 50%;
+      top: -28px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: #25313e;
+      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(52, 120, 246, .18);
+      font-size: 10px;
+      font-weight: 950;
+    }
 
     .topbar {
       position: fixed;
@@ -150,7 +179,7 @@
     }
     .tabs {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 6px;
       padding: 5px;
       border-radius: 18px;
@@ -210,6 +239,7 @@
       box-shadow: 0 18px 38px rgba(31,41,51,.25);
     }
     .pin.dim { opacity: .22; }
+    .pin.filter-hidden { display: none; }
     .pin .icon {
       display: grid;
       place-items: center;
@@ -230,6 +260,42 @@
     .pin span { margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 760; }
     .pin.hotel { background: #25313e; color: #fff; }
     .pin.hotel span { color: rgba(255,255,255,.74); }
+    .pin.anchor {
+      z-index: 18;
+      width: var(--w, 132px);
+      border: 2px solid rgba(255,255,255,.95);
+      box-shadow: 0 16px 36px rgba(31,41,51,.28);
+    }
+    .pin.anchor::after {
+      content: "固定";
+      position: absolute;
+      right: 7px;
+      top: -9px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #25313e;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 950;
+    }
+    .pin.dot {
+      grid-template-columns: 30px;
+      width: 44px;
+      min-height: 44px;
+      padding: 7px;
+      border-radius: 999px;
+    }
+    .pin.dot > span:last-child { display: none; }
+    .pin.dot.active,
+    .pin.dot.anchor {
+      grid-template-columns: 30px minmax(0, 1fr);
+      width: var(--w, 150px);
+      border-radius: 18px;
+    }
+    .pin.dot.active > span:last-child,
+    .pin.dot.anchor > span:last-child {
+      display: block;
+    }
 
     .filters {
       position: fixed;
@@ -241,9 +307,12 @@
       display: flex;
       gap: 7px;
       overflow-x: auto;
-      padding: 0 12px 9px;
+      padding: 0 72px 10px 12px;
       scrollbar-width: none;
       pointer-events: none;
+      scroll-snap-type: x proximity;
+      mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 54px), transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 54px), transparent);
     }
     .filters::-webkit-scrollbar { display: none; }
     .filter {
@@ -258,6 +327,8 @@
       color: #53606f;
       font-size: 12px;
       font-weight: 900;
+      scroll-snap-align: start;
+      white-space: nowrap;
     }
     .filter.active { color: #fff; background: var(--active-color, #25313e); border-color: transparent; }
 
@@ -373,7 +444,7 @@
       display: none;
       gap: 8px;
       overflow-x: auto;
-      padding: 0 12px;
+      padding: 0 62px 0 12px;
       scrollbar-width: none;
       pointer-events: none;
     }
@@ -392,6 +463,40 @@
     .day time { display: block; color: var(--red); font-size: 12px; font-weight: 950; }
     .day b { display: block; margin-top: 3px; font-size: 13px; }
     .day span { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 720; }
+    .zoomctl {
+      position: fixed;
+      z-index: 46;
+      right: max(12px, calc((100vw - 900px) / 2 + 12px));
+      top: 178px;
+      display: grid;
+      gap: 6px;
+      pointer-events: auto;
+    }
+    .zoomctl button,
+    .zoom-badge {
+      width: 42px;
+      min-height: 38px;
+      border: 1px solid rgba(255,255,255,.82);
+      border-radius: 15px;
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 8px 22px rgba(31,41,51,.14);
+      color: #25313e;
+      font-size: 18px;
+      font-weight: 950;
+    }
+    .zoom-badge {
+      display: grid;
+      place-items: center;
+      width: auto;
+      min-width: 42px;
+      padding: 0 8px;
+      color: #fff;
+      background: #25313e;
+      font-size: 10px;
+      writing-mode: vertical-rl;
+      letter-spacing: 0;
+    }
+    .pin.zoom-hidden { display: none; }
 
     @media (min-width: 760px) {
       .hero-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
@@ -403,28 +508,49 @@
       .phone { min-height: 100svh; }
       .map { min-height: 100svh; }
       .trip-head {
+        display: grid;
         align-items: flex-start;
+        grid-template-columns: 1fr;
         padding: 9px 10px;
         border-radius: 20px;
       }
       .trip-title b { font-size: 15px; }
       .trip-title span { font-size: 10px; }
       .flight-mini {
-        flex: 0 0 76px;
-        justify-content: flex-end;
+        justify-content: flex-start;
       }
       .flight-mini span {
         padding: 4px 6px;
         font-size: 9px;
+        white-space: normal;
       }
       .tabs { gap: 4px; padding: 4px; border-radius: 16px; }
       .tab { height: 36px; font-size: 12px; border-radius: 12px; }
-      .filters { top: 124px; padding-bottom: 8px; }
-      .filter { min-height: 32px; padding: 0 10px; font-size: 11px; }
-      .timeline { top: 166px; }
+      .filters {
+        top: 124px;
+        padding: 0 64px 10px 10px;
+        gap: 8px;
+      }
+      .filter {
+        min-height: 36px;
+        padding: 0 13px;
+        font-size: 12px;
+        border-radius: 13px;
+      }
+      .timeline { top: 166px; padding-right: 54px; }
+      .zoomctl {
+        top: 166px;
+        right: 8px;
+      }
+      .zoomctl button,
+      .zoom-badge {
+        width: 38px;
+        min-height: 34px;
+        border-radius: 13px;
+      }
       .day { flex-basis: 148px; min-height: 72px; padding: 9px; }
       .pin {
-        width: min(var(--w, 138px), 40vw);
+        width: min(var(--w, 138px), 34vw);
         min-height: 40px;
         grid-template-columns: 25px minmax(0,1fr);
         gap: 5px;
@@ -439,6 +565,20 @@
       }
       .pin b { font-size: 11px; }
       .pin span { font-size: 9px; }
+      .pin.anchor {
+        width: min(var(--w, 128px), 38vw);
+        min-height: 42px;
+      }
+      .pin.dot {
+        width: 38px;
+        min-height: 38px;
+        padding: 6px;
+      }
+      .pin.dot.active,
+      .pin.dot.anchor {
+        width: min(var(--w, 136px), 38vw);
+      }
+      .route::after { font-size: 9px; }
       .label { font-size: clamp(22px, 12vw, 44px); opacity: .82; }
       .drawer { width: calc(100% - 16px); bottom: max(8px, env(safe-area-inset-bottom)); }
       .place-card {
@@ -451,6 +591,7 @@
       .drawer.compact .place-card {
         max-height: none;
         padding: 9px 10px;
+        max-width: 300px;
       }
       .nav { padding: 6px 9px; font-size: 11px; }
       .quick {
@@ -482,17 +623,23 @@
       <div class="metro" data-name="5号线" style="--x:12%;--y:38%;--w:76%;--r:-6deg;--c:#d9373c"></div>
       <div class="metro" data-name="1号线" style="--x:18%;--y:55%;--w:58%;--r:13deg;--c:#f2c230"></div>
       <div class="metro" data-name="广佛/顺德方向" style="--x:27%;--y:78%;--w:65%;--r:19deg;--c:#179b72"></div>
+      <div class="route" data-label="9.5 11:15落地 → 酒店约45-60min" style="--x:55%;--y:17%;--w:27%;--r:129deg"></div>
+      <div class="route" data-label="酒店 → 广州南 约45-60min" style="--x:48%;--y:42%;--w:42%;--r:132deg"></div>
+      <div class="route" data-label="酒店 → 北京路 约15-25min" style="--x:43%;--y:43%;--w:26%;--r:126deg"></div>
+      <div class="route" data-label="酒店 → 体育西/天河 约20-30min" style="--x:54%;--y:41%;--w:29%;--r:40deg"></div>
+      <div class="route" data-label="广州南 → 大良 约35-50min" style="--x:24%;--y:77%;--w:50%;--r:-38deg"></div>
 
-      <div class="layer active" id="layer-hotel">
+      <div class="layer" id="layer-hotel">
         <div class="label" style="--x:30%;--y:24%;--r:-8deg">越秀</div>
         <div class="label" style="--x:78%;--y:69%;--r:-7deg">珠江新城</div>
       </div>
-      <div class="layer" id="layer-guangzhou">
+      <div class="layer active" id="layer-guangzhou">
         <div class="label" style="--x:32%;--y:24%;--r:-8deg">越秀</div>
         <div class="label" style="--x:26%;--y:67%;--r:10deg">北京路</div>
         <div class="label" style="--x:31%;--y:88%;--r:11deg">上下九</div>
         <div class="label" style="--x:15%;--y:78%;--r:-10deg">圣心</div>
         <div class="label" style="--x:78%;--y:73%;--r:-7deg">天河</div>
+        <div class="label" style="--x:77%;--y:58%;--r:7deg">体育西</div>
       </div>
       <div class="layer" id="layer-shunde">
         <div class="label" style="--x:34%;--y:74%;--r:18deg">广州南</div>
@@ -504,23 +651,28 @@
     <div class="topbar">
       <div class="trip-head glass">
         <div class="trip-title"><b>广州顺德食行地图</b><span>德安丽舍凯宾斯基 · 9.5-9.9</span></div>
-        <div class="flight-mini"><span>CZ3596 去</span><span>MU5330 回</span></div>
+        <div class="flight-mini"><span>9.5 CZ3596 08:50→11:15</span><span>9.9 MU5330 17:30→20:05</span></div>
       </div>
       <div class="tabs glass">
-        <button class="tab active" data-mode="hotel">越秀</button>
-        <button class="tab" data-mode="guangzhou">餐线</button>
-        <button class="tab" data-mode="shunde">顺德</button>
+        <button class="tab active" data-mode="guangzhou">广州大地图</button>
+        <button class="tab" data-mode="shunde">顺德本味</button>
       </div>
     </div>
 
     <div class="filters" id="filters"></div>
+    <div class="zoomctl" id="zoomctl" aria-label="地图缩放">
+      <button type="button" data-zoom-step="1" aria-label="显示更多地点">+</button>
+      <div class="zoom-badge" id="zoom-badge">街区</div>
+      <button type="button" data-zoom-step="-1" aria-label="显示更少地点">−</button>
+      <button type="button" data-zoom-reset aria-label="回到街区视图">↺</button>
+    </div>
 
     <div class="timeline" id="timeline">
-      <div class="day"><time>9.5</time><b>落地越秀</b><span>利苑/陈记顺和 + 文明路糖水</span></div>
+      <div class="day"><time>9.5</time><b>08:50飞 / 11:15到</b><span>白云T2 → 酒店 → 利苑/陈记顺和</span></div>
       <div class="day"><time>9.6</time><b>老城甜咸</b><span>圣心 → 南信/顺记 → 陈添记 → 宝华面店</span></div>
       <div class="day"><time>9.7</time><b>顺德一日</b><span>民信 → 金榜街 → 毋米粥/桑拿鸡</span></div>
-      <div class="day"><time>9.8</time><b>珠江新城/长隆</b><span>晴天长隆；热雨天东山口 → 炳胜 → 花城汇</span></div>
-      <div class="day"><time>9.9</time><b>返程</b><span>太平沙财记/酒店早餐 → 白云T3</span></div>
+      <div class="day"><time>9.8</time><b>体育西/长隆</b><span>晴天长隆；热雨天体育西/JPG → 炳胜</span></div>
+      <div class="day"><time>9.9</time><b>17:30飞 / 20:05到</b><span>早茶/甜品收尾 → 14:30左右去白云T3</span></div>
     </div>
 
     <div class="drawer compact" id="drawer">
@@ -532,30 +684,27 @@
   <script>
     const colors = { hotel:"#25313e", transport:"#3478f6", mall:"#7957d5", tea:"#179b72", snack:"#ef4e5d", delivery:"#f28a36", dessert:"#ef4e5d", meal:"#179b72", sight:"#8b5e3c" };
     const filters = {
-      hotel: [["all","全部"],["transport","交通"],["mall","商场"],["tea","早茶粤菜"],["snack","小吃甜品"],["delivery","外卖友好"]],
-      guangzhou: [["all","全部"],["tea","早茶粤菜"],["dessert","甜品冰室"],["snack","老城小吃"],["delivery","外卖夜宵"],["mall","商场夜景"],["sight","老城地标"]],
-      shunde: [["all","全部"],["transport","交通"],["dessert","双皮奶"],["snack","小吃"],["meal","正餐"]]
+      guangzhou: [["all","全部"],["tea","早茶粤菜"],["dessert","甜品冰室"],["snack","老城小吃"],["delivery","外卖夜宵"],["mall","天河商圈"],["sight","老城地标"]],
+      shunde: [["all","全部"],["meal","正餐核心"],["dessert","双皮奶"],["snack","小吃"],["transport","交通"]]
     };
+    const anchors = [
+      ["hotel","🏨","德安丽舍凯宾斯基","建设六马路19号","全程基地","酒店/外卖中心","所有路线都从这里判断：去老城短打车，去广州南/机场预留时间","https://www.amap.com/search?query=广州德安丽舍凯宾斯基酒店",49,37,166,"24小时","酒店无周一问题","外卖最友好",true],
+      ["transport","✈️","白云机场T2/T3","去程到T2 · 回程T3","CZ3596 11:15到 / MU5330 17:30飞","机场交通","9.5 虹桥T2 08:50 → 白云T2 11:15；9.9 白云T3 17:30 → 虹桥T2 20:05。返程建议14:30左右从酒店出发","https://www.amap.com/search?query=广州白云国际机场T3",77,9,154,"航站楼全天","无周一问题","早晚高峰路上更堵",true],
+      ["transport","🚄","广州南站","顺德换乘锚点","去顺德","高铁/城际/地铁","酒店到广州南约45-60分钟；再去大良约35-50分钟","https://www.amap.com/search?query=广州南站",23,78,138,"全天交通枢纽","无周一问题","节假日/早晚高峰更挤",true],
+      ["transport","🚇","淘金站","5号线","酒店最近地铁","地铁锚点","酒店步行约8分钟；去珠江新城方便，去老城可短打车更省力","https://www.amap.com/search?query=淘金站",66,35,128,"约06:00-23:30","无周一问题","通勤时段中高",true]
+    ];
     const layers = {
-      hotel: [
-        ["hotel","🏨","德安丽舍凯宾斯基","建设六马路19号","基地","酒店/外卖中心","机场约33-34公里；淘金站步行约8分钟","https://www.amap.com/search?query=广州德安丽舍凯宾斯基酒店",50,37,172],
-        ["transport","🚇","淘金站","5号线","步行","地铁锚点","去珠江新城、广州南换乘更方便","https://www.amap.com/search?query=淘金站",73,32,136],
-        ["transport","🚇","烈士陵园站","1号线","步行/短打车","北京路方向","去老城可用，热天建议打车","https://www.amap.com/search?query=烈士陵园站",31,49,146],
-        ["mall","🛍","宜安广场","环市东路","步行","利苑/商场餐饮","雨天第一兜底点","https://www.amap.com/search?query=宜安广场 广州",39,30,142],
-        ["mall","🛒","友谊商店","环市东","步行/短打车","购物避雨","淘金商圈，适合临时吃喝","https://www.amap.com/search?query=广州友谊商店环市东店",83,42,146],
-        ["mall","🛍","丽柏广场","淘金","步行/短打车","商场咖啡","热天/雨天好用","https://www.amap.com/search?query=丽柏广场 广州",77,49,136],
-        ["tea","🍵","利苑酒家","宜安广场4楼","步行约5分钟","早茶/粤菜/烧味","第一晚、雨天、正式但不折腾","https://www.amap.com/search?query=利苑酒家 宜安广场",38,36,148],
-        ["tea","🥩","陈记顺和潮汕牛肉","建设六马路店","酒店附近","潮汕牛肉火锅","不去潮汕时补一口，堂食/外卖都行","https://www.amap.com/search?query=陈记顺和潮汕牛肉 建设六马路",60,28,166],
-        ["delivery","🍛","永盈茶餐厅","建设六马路","酒店附近","茶餐厅/烧腊饭/粥粉面","落地第一天、晚上懒得出门","https://www.amap.com/search?query=永盈茶餐厅 建设六马路",61,44,150],
-        ["delivery","🥣","太平沙财记","淘金附近","步行约6分钟参考","粥粉面饭","夜宵和返程早餐兜底","https://www.amap.com/search?query=太平沙财记 淘金",48,50,146],
-        ["snack","🥘","大神牛腩","淘金店","酒店周边","牛腩/牛杂/粉面","想吃小的咸口，不必跑老城","https://www.amap.com/search?query=大神牛腩 淘金店",70,56,136],
-        ["tea","🍵","点都德","邮电新村西六街店","短打车/可步行","虾饺/凤爪/肠粉","近酒店早午茶稳妥牌","https://www.amap.com/search?query=点都德 邮电新村西六街店",26,39,154],
-        ["tea","🥢","新客家","华乐路店","酒店附近","客家菜/家常正餐","不想跑远的一顿饭","https://www.amap.com/search?query=新客家 华乐路店",55,61,132]
-      ],
       guangzhou: [
         ["tea","🍵","利苑酒家","宜安广场4楼","近酒店","早茶/粤菜","第一顿稳，建议订位","https://www.amap.com/search?query=利苑酒家 宜安广场",42,34,146],
         ["tea","🍵","点都德","邮电新村西六街店","近酒店","虾饺/凤爪/肠粉","早午餐，排队就换利苑","https://www.amap.com/search?query=点都德 邮电新村西六街店",28,41,154],
+        ["tea","🥩","陈记顺和潮汕牛肉","建设六马路店","近酒店","潮汕牛肉火锅","不去潮汕时补一口，堂食/外卖都行","https://www.amap.com/search?query=陈记顺和潮汕牛肉 建设六马路",60,28,166],
+        ["tea","🥢","新客家","华乐路店","近酒店","客家菜/家常正餐","酒店周边正餐备选，不想跑远时很好用","https://www.amap.com/search?query=新客家 华乐路店",55,61,132],
         ["delivery","🍜","太平沙财记","淘金附近","近酒店","粥粉面饭","落地/夜宵兜底，外卖友好","https://www.amap.com/search?query=太平沙财记 淘金",53,43,146],
+        ["delivery","🍛","永盈茶餐厅","建设六马路","近酒店","茶餐厅/烧腊饭/粥粉面","落地第一天、晚上懒得出门","https://www.amap.com/search?query=永盈茶餐厅 建设六马路",61,44,150],
+        ["snack","🥘","大神牛腩","淘金店","近酒店","牛腩/牛杂/粉面","想吃小的咸口，不必跑老城","https://www.amap.com/search?query=大神牛腩 淘金店",70,56,136],
+        ["mall","🛍","宜安广场","环市东路","近酒店","利苑/商场餐饮","雨天第一兜底点","https://www.amap.com/search?query=宜安广场 广州",39,30,142],
+        ["mall","🛒","友谊商店","环市东","近酒店","购物避雨","淘金商圈，适合临时吃喝","https://www.amap.com/search?query=广州友谊商店环市东店",83,42,146],
+        ["mall","🛍","丽柏广场","淘金","近酒店","商场咖啡","热天/雨天好用","https://www.amap.com/search?query=丽柏广场 广州",77,49,136],
         ["dessert","🍧","百花传统甜品","文明路","老城","芝麻糊/双皮奶/糖水","夜里专程甜品，和玫瑰二选一","https://www.amap.com/search?query=百花传统甜品 文明路",25,64,150],
         ["dessert","🍮","玫瑰甜品","文明路","老城","凤凰奶糊/杏仁豆腐","糖水第二选择，可外带","https://www.amap.com/search?query=玫瑰甜品 文明路",37,68,134],
         ["snack","🥘","阿婆牛杂","北京路片区","老城","牛杂萝卜","扫街少量尝，不当正餐","https://www.amap.com/search?query=阿婆牛杂 北京路 广州",20,56,138],
@@ -564,6 +713,8 @@
         ["delivery","🥣","达杨原味炖品","文明路","老城","椰子炖竹丝鸡","清爽补汤，可接糖水","https://www.amap.com/search?query=达杨原味炖品 文明路",43,76,148],
         ["tea","🦆","炳胜品味","珠江新城/天河","正式晚餐","烧鹅/叉烧/啫啫/海鲜","9.8推荐，建议订位","https://www.amap.com/search?query=炳胜品味 珠江新城",75,76,148],
         ["mall","🛍","K11/花城汇","珠江新城","商场夜景","空调/餐饮/广州塔","热天好用，饭后散步","https://www.amap.com/search?query=广州 K11 花城汇",84,67,136],
+        ["mall","🥤","体育西路","天河城/正佳/体育中心","美食大乱斗","JPG/茶饮/商场餐饮/夜间人流","酒店东南方向，不是老城；适合下午茶+商场+晚餐乱选","https://www.amap.com/search?query=广州体育西路",76,58,142,"商圈全天，店铺多为10:00后陆续开","商场店低风险，独立店出发前确认","高，周末和晚饭时间明显"],
+        ["dessert","☕","JPG Coffee","体育西/天河城片区","上海缺失体验","咖啡/茶咖/轻食","广州起家品牌，体育西是它的原点感区域；顺路喝，不为它跨城","https://www.amap.com/search?query=JPG Coffee 体育西 广州",84,55,132,"多为10:00后营业，具体看门店","连锁低风险；以导航为准","中，下午高"],
         ["mall","☕","东山口","署前路片区","下午茶","咖啡/小店/老洋房","9.6下午轻逛","https://www.amap.com/search?query=东山口 广州",66,55,128,"咖啡店多为10:00后陆续开","周一低风险；独立小店出发前确认","周末下午中等"],
         ["sight","⛪","圣心大教堂","一德路/海珠广场","老城地标","拍照+海味干货街","适合接北京路/文明路，不是酒店附近","https://www.amap.com/search?query=广州石室圣心大教堂",18,72,144],
         ["sight","🏛","沙面岛","荔湾","老城地标","欧陆建筑/江边散步","热就只拍半小时","https://www.amap.com/search?query=沙面岛 广州",13,83,126],
@@ -587,16 +738,15 @@
         ["sight","💦","长隆水上乐园","番禺长隆","晴热备选","水上项目/玩水","比欢乐世界更适合热天，但要带泳衣防晒","https://www.amap.com/search?query=广州长隆水上乐园",87,39,148,"9.1-10.7：周一至四10:00-19:30，周五至日10:00-21:00；以官网/现场为准","景区通常不按周一店休；遇天气可能调整","中高，晴热周末高"]
       ],
       shunde: [
-        ["transport","🚄","广州南站","从酒店打车去","出发点","高铁/城际","酒店预留45-60分钟到广州南","https://www.amap.com/search?query=广州南站",18,76,136],
         ["transport","🚇","顺德学院站","接佛山3号线","到大良方便","换到大良钟楼","适合低精力，少换公交","https://www.amap.com/search?query=顺德学院站",48,71,140],
         ["transport","🚇","大良钟楼站","大良核心","中心点","清晖园/华盖路","到站后开吃","https://www.amap.com/search?query=大良钟楼站",65,45,136],
+        ["meal","🍲","毋米粥","大良锦龙路总店","顺德核心正餐","粥底火锅","顺德才是这趟最美味的重头戏；两个人共享，午饭核心","https://www.amap.com/search?query=毋米粥 大良锦龙路总店",72,58,136],
+        ["meal","🐔","桑拿鸡","大良片区","顺德核心正餐","清爽鲜鸡","热天舒服，与毋米粥二选一；比广州乱斗更像目的地美食","https://www.amap.com/search?query=顺德 大良 桑拿鸡",82,49,128],
+        ["meal","🐟","顺德鱼生","大良片区","顺德核心正餐","鱼生少量点","尝鲜可以，别当唯一正餐，看当天店评分","https://www.amap.com/search?query=顺德 大良 鱼生",84,63,128],
         ["dessert","🍮","民信老铺","华盖路店","第一站","双皮奶/炸牛奶/姜撞奶","人多就外带，别排太久","https://www.amap.com/search?query=民信老铺 华盖路店",70,36,138],
         ["dessert","🥛","金榜欢记牛乳","金榜街","顺手吃","牛乳/双皮奶","少量尝，留肚子给正餐","https://www.amap.com/search?query=金榜欢记牛乳",41,45,142],
         ["snack","🐟","金榜鱼皮","金榜街","小吃补位","凉拌鱼皮","别点太多，尝味道就好","https://www.amap.com/search?query=金榜鱼皮 顺德",34,54,132],
         ["snack","🍰","欢姐伦教糕","大良/顺德","顺路买","伦教糕","伴手礼感，适合带回广州","https://www.amap.com/search?query=欢姐伦教糕 顺德",54,57,136],
-        ["meal","🍲","毋米粥","大良锦龙路总店","正餐首选","粥底火锅","两个人共享，午饭核心","https://www.amap.com/search?query=毋米粥 大良锦龙路总店",72,58,136],
-        ["meal","🐔","桑拿鸡","大良片区","正餐备选","清爽鲜鸡","热天舒服，与毋米粥二选一","https://www.amap.com/search?query=顺德 大良 桑拿鸡",82,49,128],
-        ["meal","🐟","顺德鱼生","大良片区","尝鲜","鱼生少量点","别当唯一正餐，看当天店评分","https://www.amap.com/search?query=顺德 大良 鱼生",84,63,128],
         ["snack","🏯","清晖园","华盖路旁","轻逛","岭南园林","热就跳过，别硬逛","https://www.amap.com/search?query=清晖园",76,27,124],
         ["snack","🛍","华盖路步行街","大良核心","街区","甜品/小吃/咖啡","连着民信，少走路","https://www.amap.com/search?query=华盖路步行街 顺德",58,32,140]
       ]
@@ -608,11 +758,26 @@
     const filterBox = document.getElementById("filters");
     const timeline = document.getElementById("timeline");
     const drawer = document.getElementById("drawer");
-    let mode = "hotel";
+    const zoomBox = document.getElementById("zoomctl");
+    const zoomBadge = document.getElementById("zoom-badge");
+    let mode = "guangzhou";
     let activeFilter = "all";
+    let zoomLevel = 2;
+    let currentPlaces = [];
+    const zoomLabels = { 1: "城市", 2: "街区", 3: "小店" };
 
     function categoryName(type) {
-      return {hotel:"酒店", transport:"交通", mall:"商场", tea:"早茶粤菜", snack:"小吃甜品", delivery:"外卖夜宵", dessert:"双皮奶", meal:"顺德正餐", sight:"老城地标"}[type] || type;
+      return {hotel:"酒店", transport:"交通", mall:"天河/商场", tea:"早茶粤菜", snack:"小吃甜品", delivery:"外卖夜宵", dessert:"甜品冰室", meal:"顺德正餐", sight:"老城地标"}[type] || type;
+    }
+
+    function zoomFor(place) {
+      const [type, , name] = place;
+      if (place[14]) return 1;
+      if (type === "transport" || type === "mall" || type === "sight") return 2;
+      if (type === "delivery" && mode === "hotel") return 2;
+      if (type === "tea" || type === "meal") return 2;
+      const anchorNames = ["百花传统甜品", "南信牛奶甜品专家", "顺记冰室", "民信老铺", "金榜欢记牛乳"];
+      return anchorNames.includes(name) ? 2 : 3;
     }
 
     function renderFilters() {
@@ -621,23 +786,27 @@
 
     function renderPins() {
       document.querySelectorAll(".pin").forEach((pin) => pin.remove());
-      layers[mode].forEach((place, index) => {
+      currentPlaces = [...anchors, ...layers[mode]];
+      currentPlaces.forEach((place, index) => {
         const [type, icon, name, area, distance, dish, note, url, x, y, w] = place;
         const pin = document.createElement("button");
-        pin.className = `pin ${type === "hotel" ? "hotel" : ""}`;
+        const isAnchor = Boolean(place[14]);
+        pin.className = `pin ${type === "hotel" ? "hotel" : ""} ${isAnchor ? "anchor" : ""}`;
         pin.dataset.index = index;
         pin.dataset.type = type;
+        pin.dataset.zoom = zoomFor(place);
+        pin.dataset.anchor = isAnchor ? "true" : "false";
         pin.style.cssText = `--x:${x}%;--y:${y}%;--w:${w}px;--c:${colors[type]}`;
         pin.innerHTML = `<span class="icon">${icon}</span><span><b>${name}</b><span>${area} · ${dish}</span></span>`;
         pin.addEventListener("click", () => selectPlace(index));
         map.appendChild(pin);
       });
       applyFilter();
-      selectPlace(0);
+      selectFirstVisible();
     }
 
     function selectPlace(index) {
-      const place = layers[mode][index];
+      const place = currentPlaces[index];
       const [type, icon, name, area, distance, dish, note, url,,,, hours, rest, crowd] = place;
       const openHours = hours || "以高德/大众点评当日显示为准";
       const restRisk = rest || "连锁/商场店低风险；小店周一和临休需确认";
@@ -657,13 +826,36 @@
         drawer.classList.toggle("compact");
         card.querySelector(".toggle").textContent = drawer.classList.contains("compact") ? "展开" : "收起";
       });
-      rail.innerHTML = layers[mode].map((item, i) => `<button class="mini" data-index="${i}"><b>${item[1]} ${item[2]}</b><span>${item[5]}</span></button>`).join("");
+      rail.innerHTML = currentPlaces.map((item, i) => `<button class="mini" data-index="${i}"><b>${item[1]} ${item[2]}</b><span>${item[5]}</span></button>`).join("");
       rail.querySelectorAll(".mini").forEach((btn) => btn.addEventListener("click", () => selectPlace(Number(btn.dataset.index))));
     }
 
-    function applyFilter() {
-      document.querySelectorAll(".pin").forEach((pin) => pin.classList.toggle("dim", activeFilter !== "all" && pin.dataset.type !== activeFilter));
+    function selectFirstVisible() {
+      const visible = [...document.querySelectorAll(".pin")].find((pin) => pin.dataset.anchor !== "true" && !pin.classList.contains("zoom-hidden") && !pin.classList.contains("filter-hidden"))
+        || [...document.querySelectorAll(".pin")].find((pin) => !pin.classList.contains("zoom-hidden") && !pin.classList.contains("filter-hidden"))
+        || [...document.querySelectorAll(".pin")].find((pin) => !pin.classList.contains("zoom-hidden"));
+      if (visible) selectPlace(Number(visible.dataset.index));
     }
+
+    function applyFilter() {
+      zoomBadge.textContent = zoomLabels[zoomLevel];
+      map.dataset.zoom = zoomLevel;
+      document.querySelectorAll(".pin").forEach((pin) => {
+        const isAnchor = pin.dataset.anchor === "true";
+        pin.classList.toggle("zoom-hidden", !isAnchor && Number(pin.dataset.zoom) > zoomLevel);
+        pin.classList.toggle("filter-hidden", !isAnchor && activeFilter !== "all" && pin.dataset.type !== activeFilter);
+        pin.classList.toggle("dot", !isAnchor && zoomLevel === 3 && activeFilter === "all");
+      });
+    }
+
+    zoomBox.addEventListener("click", (event) => {
+      const btn = event.target.closest("button");
+      if (!btn) return;
+      if (btn.dataset.zoomReset !== undefined) zoomLevel = 2;
+      else zoomLevel = Math.min(3, Math.max(1, zoomLevel + Number(btn.dataset.zoomStep || 0)));
+      applyFilter();
+      selectFirstVisible();
+    });
 
     filterBox.addEventListener("click", (event) => {
       const btn = event.target.closest(".filter");
@@ -671,6 +863,7 @@
       activeFilter = btn.dataset.type;
       renderFilters();
       applyFilter();
+      selectFirstVisible();
     });
 
     document.querySelectorAll(".tab").forEach((tab) => {
@@ -686,7 +879,7 @@
       });
     });
 
-    const initial = location.hash.replace("#", "");
+    const initial = location.hash.replace("#", "") === "hotel" ? "guangzhou" : location.hash.replace("#", "");
     const target = [...document.querySelectorAll(".tab")].find((tab) => tab.dataset.mode === initial);
     if (target) target.click();
     else { renderFilters(); renderPins(); }
